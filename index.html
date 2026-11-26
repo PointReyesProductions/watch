@@ -163,6 +163,9 @@
   footer{padding:80px 20px 34px;text-align:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
   footer a{color:var(--dim);text-decoration:none;transition:color .2s}
   footer a:hover{color:#fff}
+  footer .site{display:inline-block;color:#fff;letter-spacing:.24em;padding-bottom:3px;border-bottom:1px solid rgba(255,255,255,.35);margin-bottom:22px}
+  footer .site:hover{border-bottom-color:#fff}
+  footer .legal{color:var(--dim)}
 
   @media (max-width:640px){
     header{padding:22px 16px 20px}
@@ -229,7 +232,8 @@
 </main>
 
 <footer>
-  <a href="https://pointreyesproductions.com">© <span id="yr"></span> Point Reyes Productions</a>
+  <a class="site" href="https://pointreyesproductions.com" target="_blank" rel="noopener">pointreyesproductions.com</a>
+  <div class="legal">© <span id="yr"></span> Point Reyes Productions LLC</div>
 </footer>
 
 <script>
