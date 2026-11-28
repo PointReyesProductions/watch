@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=b8b1a712-4bb9-4100-a997-6f0e0b9c9e46
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Point Reyes Morning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --night:#0e0d0b; --night-2:#16140f;
+  --plaster:#ecdfc6; --dim:#ecdfc6a6; --faint:#ecdfc626;
+  --amber:#e0b06a; --river:#8fb0a4; --ok:#93b483; --alert:#d27a5c;
+  --display:"Marcellus","Iowan Old Style",Palatino,serif;
+  --body:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--night);color:var(--plaster);overflow:hidden;cursor:none}
+body{font-family:var(--body);font-size:2.6vh;line-height:1.35;-webkit-font-smoothing:antialiased}
+.screen{position:relative;z-index:1;height:100vh;width:100vw;padding:4.5vh 5vw 3.5vh;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto auto;gap:2.2vh;
+  background:radial-gradient(ellipse at 15% 0%,#1d1810 0%,var(--night) 60%)}
+body.hasbg .screen{background:none}
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--night)}
+.bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 4s ease}
+.bg video.on{opacity:.55}
+.bg:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,13,11,.6) 0%,rgba(14,13,11,.3) 40%,rgba(14,13,11,.75) 100%)}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:4vw}
+.greet{font-size:2.2vh;letter-spacing:.34em;text-transform:uppercase;color:var(--amber)}
+.brand{font-size:1.8vh;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);margin-top:1vh}
+.clock{text-align:right}
+.time{font-family:var(--display);font-size:9.6vh;line-height:1;letter-spacing:.04em}
+.date{font-size:2.6vh;color:var(--dim);margin-top:.6vh;letter-spacing:.08em}
+.hero h1{font-family:var(--display);font-weight:400;font-size:7.4vh;line-height:1.05;letter-spacing:.02em;text-wrap:balance;max-width:24ch}
+.grid{display:grid;grid-template-columns:1.1fr 1fr;gap:4vw;min-height:0;overflow:hidden}
+.col{display:flex;flex-direction:column;gap:2vh;min-height:0}
+.lines p{font-size:3.3vh;line-height:1.35;color:var(--plaster);max-width:34ch;margin-bottom:1.6vh}
+.eyebrow{font-size:1.8vh;letter-spacing:.3em;text-transform:uppercase;color:var(--amber);margin-bottom:1.4vh}
+.flag{border-left:.5vh solid var(--alert);background:var(--night-2);padding:2vh 2vw;border-radius:0 1vh 1vh 0}
+.flag b{display:block;font-size:3.2vh;font-weight:500}
+.flag span{display:block;font-size:2.4vh;color:var(--dim);margin-top:.4vh}
+.rows{border-top:1px solid var(--faint)}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:2vw;padding:.8vh 0;border-bottom:1px solid var(--faint)}
+.row .t{font-size:2.7vh;font-weight:500}
+.row .s{font-size:2.1vh;color:var(--dim)}
+.row .r{font-family:var(--mono);font-size:2.6vh;white-space:nowrap}
+.row .r.hot{color:var(--alert)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2vh}
+.tile{background:var(--night-2);border:1px solid var(--faint);border-radius:1vh;padding:1vh .9vw}
+.tile small{display:block;font-size:1.5vh;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+.tile b{display:block;font-family:var(--mono);font-weight:500;font-size:3.5vh;margin-top:.3vh}
+.tile.hot b{color:var(--amber)}
+.tile.sm b{font-size:2.5vh;padding-top:.8vh}
+.foot{display:flex;justify-content:space-between;gap:3vw;font-size:2vh;color:var(--dim);border-top:1px solid var(--faint);padding-top:2vh;letter-spacing:.06em}
+.foot em{font-style:normal;color:var(--amber);letter-spacing:.2em;margin-right:.5vw}
+.stale{color:var(--alert)}
+.flag.done{border-left-color:var(--ok);opacity:.6}
+.flag.done b{font-weight:400}
+.row .r.ok{color:var(--ok)}
+/* Room menu: big targets for the Fire TV remote. Arrow keys move focus; the focused link is solid amber. */
+.menu{display:flex;gap:1.2vw;padding:.6vh 0}
+.menu a{flex:1;text-align:center;font-size:2.5vh;letter-spacing:.05em;color:var(--plaster);text-decoration:none;padding:1vh .8vw;border:.3vh solid #ecdfc659;border-radius:1vh;background:rgba(22,20,15,.72)}
+.menu a:first-child{flex:1.5;border-color:var(--amber);color:var(--amber)}
+.menu a:hover,.menu a:focus,.menu a:focus-visible{outline:none;background:var(--amber);color:#1a1409;border-color:var(--amber);transform:scale(1.07);box-shadow:0 0 0 .6vh rgba(224,176,106,.5);font-weight:600}
+.empty{color:var(--dim);font-size:2.6vh}
+.floor{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1.6vh 1vw;padding:.6vh 0;min-width:0}
+.floor:empty{display:none}
+.fm{display:flex;flex-direction:column;align-items:center;gap:.5vh;min-width:0;text-align:center}
+.fm .fc{position:relative;width:6vh;height:6vh;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3a3128,#14110e);border:1px solid #ecdfc640;display:grid;place-items:center;font-family:Marcellus,serif;font-size:2.2vh;color:#ecdfc6cc}
+.fm .fc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%}
+.fm .dot{position:absolute;right:-.2vh;bottom:.2vh;width:1.4vh;height:1.4vh;border-radius:50%;border:.25vh solid #14110e;background:#7d7466}
+.fm .dot.working{background:#e9b35f}.fm .dot.waiting{background:#ef7a55}.fm .dot.done{background:#8fbf7f}
+.fm .ask{position:absolute;left:-.5vh;top:-.5vh;min-width:2vh;height:2vh;padding:0 .5vh;border-radius:2vh;background:#f3b55b;color:#14110e;font:600 1.3vh/2vh 'Hanken Grotesk',sans-serif}
+.fm small{font:500 1.25vh/1.2 'Hanken Grotesk',sans-serif;letter-spacing:.06em;text-transform:uppercase;opacity:.85;max-height:3vh;overflow:hidden}
+.fm i{font:400 1.1vh 'IBM Plex Mono',monospace;font-style:normal;opacity:.5;text-transform:uppercase;letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="bg" id="bg"><video id="v" muted loop playsinline preload="auto"></video></div>
+<audio id="a" loop preload="auto"></audio>
+<main class="screen">
+  <header class="top">
+    <div>
+      <div class="greet" id="greet">Good morning, Michael</div>
+      <div class="brand">Point Reyes Productions</div>
+    </div>
+    <div class="clock">
+      <div class="time" id="time">--:--</div>
+      <div class="date" id="date"></div>
+    </div>
+  </header>
+
+  <section class="hero"><h1 id="headline">Loading your morning.</h1></section>
+
+  <section class="grid">
+    <div class="col">
+      <div class="lines" id="lines"></div>
+      <div id="flags"></div>
+      <div><div class="eyebrow">On the floor</div><div class="floor" id="floor"></div></div>
+    </div>
+    <div class="col">
+      <div>
+        <div class="eyebrow">This week</div>
+        <div class="rows" id="week"><div class="empty">Nothing loaded yet.</div></div>
+      </div>
+      <div>
+        <div class="eyebrow">Numbers</div>
+        <div class="tiles" id="tiles"></div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="menu" id="menu" aria-label="Rooms">
+    <a href="/#ceo">CEO</a>
+    <a href="/#newsroom">Newsroom</a>
+    <a href="/#marketing">Marketing</a>
+    <a href="/#edit-bay">Edit Bay</a>
+    <a href="/#writers">Writers</a>
+    <a href="/#screening">Screening</a>
+    <a href="/#business">Lookout</a>
+    <a href="/#atrium">Atrium</a>
+    <a href="/tv/world/">World</a>
+  </nav>
+
+  <footer class="foot">
+    <span id="footer"></span>
+    <span id="updated"></span>
+  </footer>
+</main>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+
+function clock(){
+  const d=new Date(), h=d.getHours();
+  $('time').textContent=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  $('date').textContent=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  $('greet').textContent='Good '+(h<12?'morning':h<17?'afternoon':'evening')+', Michael';
+}
+
+/* Days from today (TV's local date) to an ISO date like 2026-11-04. 0 = today. */
+function daysTo(iso){const p=iso.split('-'),d=new Date(+p[0],+p[1]-1,+p[2]),t=new Date();t.setHours(0,0,0,0);return Math.round((d-t)/864e5)}
+function fmtDay(iso){const p=iso.split('-');return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('en-US',{month:'short',day:'numeric'})}
+function whenWord(n,iso){if(n<0)return 'overdue';if(n===0)return 'today';if(n===1)return 'tomorrow';const p=iso.split('-');return 'on '+new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})}
+
+function render(d){
+  const b=d.briefing||{};
+  /* A deadline with done:true + doneAt stays up as "Done" for today and the next day, then drops off. */
+  const all=(b.deadlines||[]).map(x=>Object.assign({n:daysTo(x.due)},x));
+  const dl=all.filter(x=>!x.done&&x.n>=-1).sort((a,c)=>a.n-c.n);
+  const done=all.filter(x=>x.done&&x.doneAt&&daysTo(x.doneAt)>=-1);
+  const soon=dl.filter(x=>x.n<=2);
+  let head=b.headline||'Nothing loaded yet.';
+  if(soon.length){const w=soon[0].n<0?'overdue':soon[0].n===0?'today':soon[0].n===1?'tomorrow':'this week';head=(soon.length===1?'One deadline ':soon.length+' deadlines ')+w+'.'}else if(done.length&&!dl.length)head='All caught up.';
+  $('headline').textContent=head;
+
+  const lines=$('lines');lines.replaceChildren();
+  dl.slice(0,2).forEach(x=>lines.appendChild(el('p',null,x.t+' is due '+whenWord(x.n,x.due)+'. '+(x.pen||''))));
+  done.slice(0,2).forEach(x=>lines.appendChild(el('p',null,'✓ '+x.t+': '+(x.doneLabel||'Done').toLowerCase()+'.')));
+  (b.lines||[]).forEach(t=>lines.appendChild(el('p',null,t)));
+
+  const flags=$('flags');flags.replaceChildren();
+  const fl0=dl.map(x=>({t:x.short||x.t,s:(x.s||'').replace('{due}',whenWord(x.n,x.due))})).concat(done.map(x=>({t:'✓ '+(x.short||x.t),s:(x.doneLabel||'Done')+': done · '+fmtDay(x.doneAt),done:true})));
+  const fl=fl0.length?fl0:(b.flags||[]);
+  if(fl.length){
+    flags.appendChild(el('div','eyebrow',dl.length||!done.length?'Needs you':'Done'));
+    fl.slice(0,2).forEach(f=>{const box=el('div','flag'+(f.done?' done':''));box.appendChild(el('b',null,f.t||''));box.appendChild(el('span',null,(f.s||'').replace(/^./,c=>c.toUpperCase())));flags.appendChild(box)});
+  }
+
+  const week=$('week');week.replaceChildren();
+  const rows=(d.agents&&d.agents.producer&&d.agents.producer.rows)||[];
+  if(!rows.length) week.appendChild(el('div','empty','Nothing scheduled.'));
+  rows.slice(0,6).forEach(x=>{
+    const r=el('div','row');const left=el('div');
+    left.appendChild(el('div','t',x.t||''));left.appendChild(el('div','s',x.s||''));
+    r.appendChild(left);r.appendChild(el('div','r'+(x.tone==='drift'?' hot':x.tone==='done'?' ok':''),x.r||''));
+    week.appendChild(r);
+  });
+
+  const tiles=$('tiles');tiles.replaceChildren();
+  const T=(d.agents&&d.agents.newsroom&&d.agents.newsroom.tiles)||[];
+  T.slice(0,6).forEach(x=>{
+    const v=String(x.v==null?'-':x.v);
+    const t=el('div','tile'+(x.hot?' hot':'')+(v.length>7?' sm':''));
+    t.appendChild(el('small',null,x.k||''));t.appendChild(el('b',null,v));
+    tiles.appendChild(t);
+  });
+
+  const floor=$('floor');floor.replaceChildren();
+  const AG=d.agents||{},RO=d.roster||{},RN={ceo:'CEO',producer:'Producer',newsroom:'Newsroom',marketing:'Marketing','edit-bay':'Edit Bay',writers:'Writers',business:'Lookout'};
+  const ORD={waiting:0,working:1,done:2,idle:3};
+  Object.keys(RO).filter(id=>AG[id]).map(id=>Object.assign({id},AG[id])).sort((x,y)=>(ORD[x.light]??3)-(ORD[y.light]??3)).slice(0,12).forEach(a=>{
+    const m=el('div','fm'),f=el('div','fc',String(a.name||a.id).replace(/^the\s+/i,'').split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase());
+    if(/^https:\/\//i.test(a.avatar||'')&&!/\.(mp4|webm)(\?|$)/i.test(a.avatar)){const im=document.createElement('img');im.src=a.avatar;im.alt='';f.appendChild(im)}
+    f.appendChild(el('span','dot '+(a.light||'idle')));
+    const n=(a.waitingOnMichael||[]).length;if(n)f.appendChild(el('span','ask',String(n)));
+    m.appendChild(f);m.appendChild(el('small',null,a.name||a.id));floor.appendChild(m);
+  });
+
+  $('footer').textContent=b.footer||'';
+
+  const gen=b.generatedAt||d.generatedAt;
+  const u=$('updated');u.className='';
+  if(gen){
+    const g=new Date(gen), age=(Date.now()-g.getTime())/36e5;
+    const when=g.toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    if(age>26){u.className='stale';u.textContent='Out of date. Last updated '+when}
+    else u.textContent='Updated '+when;
+  }
+}
+
+/* Reads the live feed (/api/data, updated by the daily run) and the shipped data.json, and uses whichever is newer. */
+async function getFeed(){let best=null;for(const u of ['/api/data','/data.json']){try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)continue;const j=await r.json();if(j&&j.briefing&&(!best||String(j.generatedAt||'')>String(best.generatedAt||'')))best=j}catch(e){}}if(!best)throw 0;return best}
+async function load(){
+  try{
+    render(await getFeed());
+  }catch(e){
+    $('headline').textContent='No data right now.';
+    const u=$('updated');u.className='stale';u.textContent='Could not load the feed';
+  }
+}
+
+/* Time-of-day scenes. Add a row per clip. Times are the TV's local time.
+   Test any time: /tv/?t=06:30 */
+const SCENES=[
+  {from:'06:00',to:'19:00',video:'media/jungle-3min.mp4',audio:'media/jungle-20min.m4a',vol:.22}
+];
+const RAMP=180, FADEOUT=30;
+const mins=s=>{const p=s.split(':');return (+p[0])*60+(+p[1])};
+function nowMin(){const q=new URLSearchParams(location.search).get('t');if(q)return mins(q);const d=new Date();return d.getHours()*60+d.getMinutes()+d.getSeconds()/60}
+function pick(){const n=nowMin();return SCENES.find(s=>n>=mins(s.from)&&n<mins(s.to))||null}
+const V=$('v'),A=$('a');let cur=null,since=0,unlocked=false;
+function tryPlay(){A.play().then(()=>{unlocked=true}).catch(()=>{
+  ['keydown','click','touchstart'].forEach(e=>addEventListener(e,()=>{A.play().then(()=>{unlocked=true}).catch(()=>{})},{once:true}));
+})}
+function setScene(s){
+  cur=s;since=Date.now();
+  if(!s){V.classList.remove('on');document.body.classList.remove('hasbg');A.pause();return}
+  document.body.classList.add('hasbg');
+  V.src=s.video;V.load();V.play().catch(()=>{});V.oncanplay=()=>V.classList.add('on');
+  A.src=s.audio;A.volume=0;tryPlay();
+}
+function tick(){
+  const s=pick();
+  if((s&&s.video)!==(cur&&cur.video))setScene(s);
+  if(!cur)return;
+  const up=Math.min(1,(Date.now()-since)/1000/RAMP);
+  const left=(mins(cur.to)-nowMin())*60;
+  const down=Math.max(0,Math.min(1,left/FADEOUT));
+  A.volume=Math.max(0,Math.min(1,cur.vol*up*down));
+}
+tick();setInterval(tick,1000);
+
+/* Remote shortcuts: with nothing highlighted, an arrow key highlights CEO's Office and OK/Enter opens it. */
+document.addEventListener('keydown',e=>{
+  const links=[].slice.call(document.querySelectorAll('.menu a'));if(!links.length)return;
+  const k=e.key,i=links.indexOf(document.activeElement);
+  if(i<0){
+    if(k==='Enter'){e.preventDefault();location.href=links[0].getAttribute('href')}
+    else if(k.indexOf('Arrow')===0){e.preventDefault();links[0].focus()}
+    return;
+  }
+  if(k==='ArrowRight'||k==='ArrowDown'){e.preventDefault();links[Math.min(i+1,links.length-1)].focus()}
+  else if(k==='ArrowLeft'||k==='ArrowUp'){e.preventDefault();links[Math.max(i-1,0)].focus()}
+});
+
+/* Picks up new versions of this page by itself. A reload only happens when version.txt changes. */
+const BUILD='tv-2026-11-28-1';
+async function checkVersion(){try{const r=await fetch('/tv/version.txt',{cache:'no-store'});if(!r.ok)return;const v=(await r.text()).trim();if(v&&v!==BUILD)location.reload()}catch(e){}}
+setInterval(checkVersion,600000);
+
+clock();setInterval(clock,10000);
+load();setInterval(load,300000);
+})();
+</script>
+</body>
+</html>

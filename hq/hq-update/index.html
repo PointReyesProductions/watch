@@ -1,0 +1,730 @@
+<!doctype html><html><head><meta charset=utf8>
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=b8b1a712-4bb9-4100-a997-6f0e0b9c9e46
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. --><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Point Reyes HQ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: one cinematic plate on top (the room you're standing in), a rail of rooms beneath it, then that room's working detail. Single committed night look. */
+:root{
+  --night:#0e0d0b;          /* ground */
+  --night-2:#16140f;        /* raised surfaces */
+  --plaster:#ecdfc6;        /* primary text, lime plaster */
+  --plaster-dim:#ecdfc699;
+  --plaster-faint:#ecdfc626;
+  --walnut:#7a4f33;
+  --amber:#e0b06a;          /* accent: cove light */
+  --river:#8fb0a4;          /* secondary: river water */
+  --ok:#93b483; --warn:#e0b06a; --alert:#d27a5c;
+  --flap:#0a0908;
+  --display:"Marcellus","Iowan Old Style","Palatino Linotype",Palatino,serif;
+  --body:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--night);color:var(--plaster)}
+body{font-family:var(--body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--night)}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 48px;max-width:1500px;margin:0 auto;display:grid;gap:18px}
+
+/* Masthead */
+.mast{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.brand h1{font-family:var(--display);font-weight:400;font-size:clamp(20px,2.4vw,28px);letter-spacing:.28em;margin:0;text-transform:uppercase}
+.brand span{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--plaster-dim)}
+.meta{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:12px;color:var(--plaster-dim);font-variant-numeric:tabular-nums}
+.chip{font-family:var(--body);font-size:10px;letter-spacing:.22em;text-transform:uppercase;border:1px solid var(--plaster-faint);padding:4px 10px;border-radius:999px;color:var(--amber)}
+
+/* Stage */
+.stage-box{display:flex;justify-content:center}
+.stage{position:relative;width:min(100%,calc(78vh * 16 / 9));aspect-ratio:16/9;max-width:100%;overflow:hidden;border-radius:6px;background:#000;box-shadow:0 30px 80px -30px #000}
+.room{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;transform-origin:50% 55%}
+.room.on{opacity:1;animation:drift 26s ease-out forwards}
+@keyframes drift{from{transform:scale(1.035)}to{transform:scale(1)}}
+.room.still{animation:none;transition:none}
+.ext{position:absolute;inset:0;z-index:2;pointer-events:none;box-shadow:0 30px 40px -10px #000}
+.ext img,.ext .cv{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
+.ext .cv{opacity:0}.ext .walk-cap{z-index:1}
+.flash{position:absolute;inset:0;z-index:2;opacity:0;pointer-events:none;background:radial-gradient(circle at 50% 25%,#fffaf0,#ffe6bd 70%)}
+.holo{width:1000px;height:425px;position:relative;perspective:900px}
+.beam{position:absolute;bottom:0;width:70px;transform:translateX(-50%);background:linear-gradient(to top,#ffd08a70,#ffd08a00);filter:blur(10px);border-radius:50%}
+.hp{position:absolute;width:175px;box-sizing:border-box;padding:12px 14px;border:1px solid #ffe2b38c;border-radius:10px;background:linear-gradient(180deg,#3a250f8c,#3a250f4d);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);color:#fff7e8;font-family:var(--body);text-shadow:0 0 10px #ffb84d99;box-shadow:0 0 34px #ffb84d40,inset 0 0 18px #ffd9a026;transform:rotateY(var(--ry));animation:bob 6s ease-in-out infinite}
+.hp small{display:block;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#ffd08a}
+.hp b{display:block;font:400 28px/1.15 var(--display);margin:4px 0 3px}
+.hp span{display:block;font-size:13px;line-height:1.3;color:#fff7e8cc}
+@keyframes bob{50%{translate:0 -8px}}
+.walk{position:absolute;inset:0;z-index:2;opacity:0;transition:opacity .35s ease;background:#000}
+.walk.in{opacity:1}.walk.out{opacity:0}
+.walk video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.walk-cap{position:absolute;left:clamp(10px,2%,24px);bottom:clamp(10px,3%,26px);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--plaster-dim);text-shadow:0 1px 12px #000}
+.walk-cap b{display:block;font:400 clamp(15px,2.2vw,30px) var(--display);letter-spacing:.14em;color:var(--plaster);margin-top:4px}
+.room img,.room video.plate{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
+.tint{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,transparent 40%,#00000080 100%)}
+.screen{position:absolute;left:0;top:0;transform-origin:0 0;overflow:hidden;color:var(--plaster);font-family:var(--body)}
+.label{position:absolute;left:clamp(10px,2%,24px);bottom:clamp(10px,3%,26px);display:flex;align-items:center;gap:10px;pointer-events:none;text-shadow:0 1px 12px #000}
+.label b{font-family:var(--display);font-weight:400;font-size:clamp(15px,2.2vw,30px);letter-spacing:.14em;text-transform:uppercase}
+.nav-arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid #ecdfc640;background:#0e0d0b66;color:var(--plaster);font-size:18px;cursor:pointer;display:grid;place-items:center;backdrop-filter:blur(6px);z-index:3}
+.nav-arrow:hover{background:#0e0d0bb3}
+.nav-arrow:focus-visible,.rail button:focus-visible,.btn:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.briefback{position:absolute;top:12px;left:12px;z-index:5;font:600 clamp(13px,1.6vw,22px) var(--display);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--amber);background:#0e0d0bcc;border:1px solid var(--amber);border-radius:999px;padding:.55em 1.1em;backdrop-filter:blur(6px)}
+.briefback:hover,.briefback:focus-visible{background:var(--amber);color:#0e0d0b;outline:none;transform:scale(1.06)}
+.prev{left:max(10px,env(safe-area-inset-left,0px))}.next{right:max(10px,env(safe-area-inset-right,0px))}
+
+/* status light */
+.light{width:9px;height:9px;border-radius:50%;flex:none;background:var(--plaster-faint)}
+.light.working{background:var(--amber);box-shadow:0 0 10px var(--amber);animation:pulse 2.4s ease-in-out infinite}
+.light.waiting{background:var(--river);box-shadow:0 0 10px var(--river);animation:pulse 1.4s ease-in-out infinite}
+.light.done{background:var(--ok)}
+@keyframes pulse{50%{opacity:.35}}
+
+/* Rail */
+.rail{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.rail button{flex:1 0 auto;min-width:118px;display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;border:1px solid var(--plaster-faint);background:var(--night-2);color:var(--plaster-dim);font:500 12px/1.2 var(--body);letter-spacing:.04em;cursor:pointer;text-align:left}
+.rail button[aria-current="true"]{color:var(--plaster);border-color:var(--amber);background:#221d15}
+.rail button:hover{color:var(--plaster)}
+
+/* Detail */
+.detail{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.6fr);gap:28px;align-items:start;padding-top:6px}
+@media (max-width:860px){.detail{grid-template-columns:minmax(0,1fr)}}
+.eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--amber)}
+.detail h2{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.2vw,40px);letter-spacing:.06em;margin:6px 0 10px;text-wrap:balance}
+.agent{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--plaster-dim)}
+.now{margin:16px 0 0;padding:14px 16px;border-left:2px solid var(--amber);background:var(--night-2);border-radius:0 6px 6px 0;max-width:60ch}
+.now small{display:block;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--plaster-dim);margin-bottom:4px}
+.rows{display:grid;gap:0;border-top:1px solid var(--plaster-faint)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:12px 2px;border-bottom:1px solid var(--plaster-faint);align-items:center}
+.row .t{font-weight:500;min-width:0}
+.row .s{font-size:12.5px;color:var(--plaster-dim);grid-column:1}
+.row .r{grid-row:1 / span 2;grid-column:2;font-family:var(--mono);font-size:12px;text-align:right;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;padding:3px 8px;border-radius:3px;color:var(--flap)}
+.st-cut,.st-boarding{background:var(--warn)}.st-review{background:var(--plaster)}.st-delivered{background:var(--ok)}.st-delayed{background:var(--alert);color:var(--plaster)}.st-waiting{background:var(--river)}
+.bars{display:grid;gap:10px;margin-top:16px}
+.bar{display:grid;grid-template-columns:76px minmax(0,1fr) 44px;gap:10px;align-items:center;font-size:12px;color:var(--plaster-dim)}
+.bar i{display:block;height:6px;border-radius:3px;background:var(--plaster-faint);overflow:hidden}
+.bar i b{display:block;height:100%;background:var(--amber)}
+.bar span:last-child{font-family:var(--mono);text-align:right}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.btn{font:600 11px var(--body);letter-spacing:.24em;text-transform:uppercase;padding:13px 22px;border-radius:999px;border:1px solid #ecdfc666;background:transparent;color:var(--plaster);cursor:pointer}
+.btn.go{background:var(--amber);border-color:var(--amber);color:var(--flap)}
+.btn:disabled{opacity:.35;cursor:default}
+.foot{font-size:12px;color:var(--plaster-dim);display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;border-top:1px solid var(--plaster-faint);padding-top:14px}
+.foot button{background:none;border:0;color:var(--amber);font:inherit;cursor:pointer;padding:0;text-decoration:underline}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;transition:.35s;background:#221d15;border:1px solid var(--amber);padding:11px 18px;border-radius:999px;font-size:13px;z-index:20;max-width:calc(100% - 32px)}
+.sound{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:21;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.sound-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--plaster-faint);background:#0e0d0bcc;backdrop-filter:blur(8px);color:var(--plaster);display:grid;place-items:center;cursor:pointer}
+.sound-btn svg{width:17px;height:17px;stroke:var(--plaster);fill:none;stroke-width:1.6}
+.sound-btn[aria-pressed="true"]{border-color:var(--amber);color:var(--amber)}
+.sound-btn[aria-pressed="true"] svg{stroke:var(--amber)}
+.sound-btn .off{display:none}
+.sound-btn[aria-pressed="false"] .on{display:none}
+.sound-btn[aria-pressed="false"] .off{display:block}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* On-screen content (logical px, scaled by the room's perspective) */
+.board{width:1000px;height:430px;padding:30px 38px;box-sizing:border-box;background:linear-gradient(180deg,#0b0a09e6,#0b0a09f5)}
+.bh{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid #e0b06a55;padding-bottom:12px;font-size:13px;letter-spacing:.32em;color:var(--amber)}
+.bh b{font-family:var(--display);font-weight:400;font-size:22px;letter-spacing:.34em;color:var(--plaster)}
+.bt{width:100%;border-collapse:separate;border-spacing:0 7px;margin-top:6px;font-family:var(--mono);font-size:19px}
+.bt th{font:500 11px var(--body);letter-spacing:.28em;color:#ecdfc680;text-align:left;padding:2px 0}
+.cells{display:inline-flex;gap:2px}
+.cells i{font-style:normal;display:inline-block;width:.68em;text-align:center;background:var(--flap);padding:3px 1px;border-radius:2px;box-shadow:inset 0 -1px 0 #ffffff12, inset 0 1px 0 #000}
+.stat i{color:var(--flap)}
+.stat.st-cut i,.stat.st-boarding i{background:var(--warn)}.stat.st-review i{background:var(--plaster)}.stat.st-delivered i{background:var(--ok)}.stat.st-delayed i{background:var(--alert);color:var(--plaster)}.stat.st-waiting i{background:var(--river)}
+.tick{position:absolute;left:0;right:0;bottom:0;padding:11px 38px;border-top:1px solid #e0b06a40;font-size:13px;letter-spacing:.14em;color:#ecdfc6bf;white-space:nowrap;overflow:hidden;background:#00000066}
+.tick em{font-style:normal;color:var(--amber)}
+.glass{width:600px;height:440px;padding:30px 34px;box-sizing:border-box;background:linear-gradient(160deg,#1b140dd9,#1b140da6);border:1px solid #f3d39d55;border-radius:18px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fbf4e6;text-shadow:0 1px 8px #0006}
+.glass h3{font-family:var(--display);font-weight:400;font-size:30px;margin:4px 0 16px;letter-spacing:.06em}
+.glass p{margin:0 0 12px;font-size:19px;line-height:1.35}
+.glass small{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#f3d39d}
+.wallq{width:1000px;height:140px;display:flex;gap:18px;align-items:center;padding:0 26px;box-sizing:border-box;font-family:var(--mono)}
+.wq{flex:1;border-left:2px solid var(--amber);padding-left:14px;color:#ecdfc6d9}
+.wq small{display:block;font-size:13px;letter-spacing:.2em;color:var(--amber)}
+.wq b{display:block;font-size:26px;font-weight:500;margin:4px 0}
+.wq i{display:block;height:6px;background:#ecdfc626;border-radius:3px;overflow:hidden}.wq i u{display:block;height:100%;background:var(--amber)}
+.sheet{width:1000px;height:380px;padding:28px 34px;box-sizing:border-box;background:#0c0b0aee;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.sheet h4{grid-column:1/-1;margin:0;font:400 24px var(--display);letter-spacing:.28em;color:var(--amber)}
+.day{border-top:1px solid #e0b06a66;padding-top:12px;font-size:28px;line-height:1.2}
+.day small{display:block;font-family:var(--mono);font-size:20px;margin-bottom:6px;color:var(--amber);letter-spacing:.14em}
+.pipe{width:700px;height:740px;padding:34px;box-sizing:border-box;background:#0c0b0aee;font-family:var(--mono)}
+.pipe h4{margin:0 0 20px;font:400 30px var(--display);letter-spacing:.24em;color:var(--amber)}
+.stage-row{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid #ecdfc626;padding:16px 0;font-size:24px}
+.stage-row b{font-size:44px;font-weight:500;color:var(--plaster)}
+.feeds{width:1000px;height:470px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);gap:6px;padding:4px;box-sizing:border-box}
+.feed{background:#0c0b0ae6;padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between;font-family:var(--mono);font-size:14px;color:#ecdfc6b3}
+.feed b{font-size:30px;font-weight:500;color:var(--plaster)}
+.feed.hot{background:#2a2013f0}.feed.hot b{color:var(--amber)}
+.studio{width:760px;height:360px;display:flex;gap:8px;box-sizing:border-box}
+.studio-reel{flex:1 1 52%;position:relative;background:#0c0b0ae6;border-radius:4px;overflow:hidden;display:grid;place-items:center}
+.studio-vid{width:100%;height:100%;object-fit:cover;display:block}
+.reel-empty{text-align:center;color:#ecdfc699;font-family:var(--body)}
+.reel-empty small{display:block;font-size:13px;letter-spacing:.24em;text-transform:uppercase;margin-bottom:8px}
+.reel-empty b{display:block;font-size:22px;font-weight:500;color:var(--plaster)}
+.reel-empty span{display:block;font-size:14px;margin-top:6px;color:#ecdfc680}
+.studio-side{flex:1 1 48%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:6px}
+.feeds.sm{width:auto;height:auto;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr)}
+.studio-side .feed,.feeds.sm .feed{padding:8px 10px;font-size:11px;letter-spacing:-.02em;min-width:0;overflow:hidden}
+.studio-side .feed b,.feeds.sm .feed b{font-size:21px}
+.vert{width:300px;height:560px;padding:20px;box-sizing:border-box;background:linear-gradient(180deg,#1d1812,#0c0b0a);display:flex;flex-direction:column;justify-content:space-between;font-family:var(--body)}
+.vert small{font-family:var(--mono);font-size:16px;color:var(--amber);letter-spacing:.1em}
+.vert b{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.15}
+.vert span{font-size:16px;color:#ecdfc6a6}
+.scr{width:1000px;height:372px;display:flex;background:#050403}.scr-vid{width:662px;height:372px;flex:none;background:#000;object-fit:contain;display:block}.scr-play{width:662px;height:372px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-decoration:none;color:var(--plaster);background:radial-gradient(ellipse at 50% 45%,#3b2f23,#100d0a 72%)}.scr-play i{font-style:normal;font-size:64px;color:var(--amber)}.scr-play small{font-size:15px;letter-spacing:.3em}.scr-play span{font-size:13px;color:#ecdfc699}.scr iframe{width:662px;height:372px;border:0;flex:none;pointer-events:auto}.scr-info{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 22px;gap:10px}.scr-info small{font-size:13px;letter-spacing:.3em;color:var(--amber)}.scr-info b{font-family:var(--display);font-weight:400;font-size:26px;letter-spacing:.1em}.scr-info span{font-size:13px;letter-spacing:.2em;color:#ecdfc699}
+.cine{width:1000px;height:372px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse at 50% 45%,#3b2f23,#100d0a 72%)}
+.cine small{font-size:15px;letter-spacing:.42em;color:var(--amber)}
+.cine b{font-family:var(--display);font-weight:400;font-size:52px;letter-spacing:.18em;margin:14px 0 10px}
+.cine span{font-size:16px;letter-spacing:.3em;color:#ecdfc699}
+.label em,.eyebrow em{font:500 10px var(--body);font-style:normal;letter-spacing:.24em;text-transform:uppercase;color:var(--plaster-dim);border:1px solid var(--plaster-faint);padding:2px 8px;border-radius:999px;margin-left:8px}
+.label em:empty{display:none}
+/* ---------- crew: every agent in its room ---------- */
+.crew{position:absolute;right:clamp(10px,2%,24px);bottom:clamp(10px,3%,26px);display:flex;gap:clamp(6px,1vw,14px);pointer-events:none;z-index:3}
+.crew:empty{display:none}
+.mate{display:flex;flex-direction:column;align-items:center;gap:5px;width:clamp(54px,6.4vw,92px);text-align:center;text-shadow:0 1px 10px #000}
+.face{position:relative;width:clamp(44px,5.4vw,78px);aspect-ratio:1;border-radius:50%;overflow:visible;background:#1a1612;border:1px solid #ecdfc640;box-shadow:0 6px 22px #0009}
+.face img,.face video{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.face .ini{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:clamp(14px,1.8vw,24px);letter-spacing:.06em;color:#ecdfc6cc;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3a3128,#14110e)}
+.face .light{position:absolute;right:-1px;bottom:2px;width:clamp(10px,1vw,14px);height:clamp(10px,1vw,14px);border:2px solid #14110e}
+.face .ask{position:absolute;left:-4px;top:-4px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--amber,#f3b55b);color:#14110e;font:600 10px/18px var(--body);text-shadow:none}
+.mate small{font:500 clamp(8px,.8vw,11px)/1.15 var(--body);letter-spacing:.08em;text-transform:uppercase;color:#fbf4e6dd;max-width:100%;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.plate-css{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 35%,#5a4330 0%,#2a2018 38%,#100c09 78%),#100c09}
+.plate-css::after{content:"Writers' Room";position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);font-family:var(--display);font-size:clamp(28px,6vw,90px);letter-spacing:.2em;text-transform:uppercase;color:#ecdfc614;white-space:nowrap}
+.crewlist{margin-top:18px;display:grid;gap:10px}
+.cm{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start;padding:10px 12px;border:1px solid #ecdfc61f;border-radius:12px;background:#ffffff06}
+.cm .face{width:52px}
+.cm b{display:block;font-weight:600;font-size:14px}
+.cm .does{font-size:12px;color:var(--plaster-dim)}
+.cm .nowl{font-size:13px;margin-top:4px}
+.cm .look{font-size:11px;color:var(--plaster-dim);font-style:italic;margin-top:4px}
+.cm ul{margin:6px 0 0;padding-left:16px;font-size:12px;color:#f3d39d}
+
+.chip.live{color:var(--ok);border-color:#93b48366}
+.stamp{margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--plaster-dim)}
+.waterfx{position:absolute;inset:0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(0deg,transparent,#000 30%,#000 70%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent),linear-gradient(0deg,transparent,#000 30%,#000 70%,transparent);mask-composite:intersect}
+.waterfx i{position:absolute;top:-60%;left:-40%;width:220%;height:260%;font-style:normal;background:repeating-linear-gradient(98deg,transparent 0 7%,rgba(255,244,221,.16) 8%,transparent 10% 19%),repeating-linear-gradient(98deg,transparent 0 11%,rgba(224,176,106,.1) 12%,transparent 14% 26%);mix-blend-mode:screen;filter:blur(.6px);animation:waterdrift 9s linear infinite}
+.waterfx i.b{animation-duration:14s;animation-direction:reverse;opacity:.6}
+@keyframes waterdrift{0%{transform:translate(0,0)}100%{transform:translate(8%,3%)}}
+@media (prefers-reduced-motion:reduce){.waterfx i{animation:none}}
+@media (prefers-reduced-motion:reduce){.room.on,.light.working,.light.waiting{animation:none}.room{transition:none}}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="brand"><h1>Point Reyes Productions</h1><span>Headquarters · Portland Parish</span></div>
+    <div class="meta"><span id="clock">--:--</span><span class="chip" id="mode">Connecting</span></div>
+  </header>
+
+  <div class="stage-box">
+    <div class="stage" id="stage" aria-label="Headquarters view">
+      <a class="briefback" id="briefback" href="/tv/">&#8592; Briefing</a>
+      <button class="nav-arrow prev" id="prev" aria-label="Previous room">&#8592;</button>
+      <button class="nav-arrow next" id="next" aria-label="Next room">&#8594;</button>
+    </div>
+  </div>
+
+  <nav class="rail" id="rail" aria-label="Rooms"></nav>
+
+  <section class="detail" id="detail" aria-live="polite"></section>
+
+  <footer class="foot">
+    <span id="footnote">Loading your numbers. Rooms with no agent behind them say Off duty.</span>
+    <span>Use ← → to walk the campus<span id="resetwrap"> · <button id="reset" type="button">Reset sample data</button></span></span>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<div class="sound" id="sound">
+  <button class="sound-btn" id="soundBtn" type="button" aria-pressed="false" aria-label="Mute background music" title="As I Am — Dub Reggae">
+    <svg class="on" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg>
+    <svg class="off" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/><path d="M3 3l18 18" stroke-width="1.6"/></svg>
+  </button>
+  <audio id="bgm" src="audio/dub.mp3" loop preload="auto" muted></audio>
+  <audio id="rain" src="audio/rain.mp3" loop preload="auto" muted></audio>
+</div>
+
+<script>
+(function(){
+/* ---------- sample state ---------- */
+const DEFAULT = {
+  projects:[],
+  queue:[],
+  decided:[]
+};
+let S;
+try{ S = JSON.parse(localStorage.getItem('prhq-state')) || null }catch(e){ S=null }
+if(!S) S = JSON.parse(JSON.stringify(DEFAULT));
+const save=()=>{ if(LIVE.on) return; try{ localStorage.setItem('prhq-state',JSON.stringify(S)) }catch(e){} };
+
+/* ---------- live data: the agents' shared database ----------
+   hq/briefing        CEO's 6 AM briefing
+   agents/<roomId>    each agent's status: {light, now, rows:[{t,s,r,tone}], updatedAt}
+   board/projects     {items:[{id,name,div,status,due}]} for the atrium board
+   screening/<id>     {title, note, from, status:'waiting'|'greenlit'|'sentback', createdAt, decidedAt}
+   A room shows live data only once its agent has written; until then it says Sample. */
+const LIVE={on:true,briefing:null,agents:{},roster:{},projects:null,screening:null};
+const ALIAS={editbay:'edit-bay','edit_bay':'edit-bay',lookout:'business',writersroom:'writers','writers-room':'writers'};
+const roomOf=id=>{const r=String((LIVE.roster||{})[id]||'').toLowerCase();return ALIAS[r]||r};
+/* every agent whose roster room is this room; a room-keyed agent with no roster line still counts as that room's lead */
+function crewOf(room){const A=LIVE.agents||{},out=[];Object.keys(A).forEach(id=>{const a=A[id];if(!a||typeof a!=='object')return;const r=roomOf(id)||(id===room?room:'');if(r===room)out.push(Object.assign({id},a))});return out.sort((x,y)=>(x.id===room?-1:y.id===room?1:0))}
+const RANK={waiting:0,working:1,done:2,idle:3};
+const topLight=C=>C.map(a=>LIGHTS.includes(a.light)?a.light:'idle').sort((a,b)=>RANK[a]-RANK[b])[0]||'idle';
+const initials=n=>String(n||'?').replace(/^the\s+/i,'').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+const safeUrl=u=>/^https:\/\//i.test(String(u||''))?String(u):'';
+function faceHTML(a){const u=safeUrl(a.avatar),asks=(a.waitingOnMichael||[]).length;
+  const media=u?(/\.(mp4|webm)(\?|$)/i.test(u)?`<video src="${esc(u)}" muted loop autoplay playsinline></video>`:`<img src="${esc(u)}" alt="" loading="lazy">`):'';
+  return `<div class="face">${media||`<span class="ini">${esc(initials(a.name||a.id))}</span>`}<span class="light ${LIGHTS.includes(a.light)?a.light:'idle'}"></span>${asks?`<span class="ask">${asks}</span>`:''}</div>`}
+function renderCrew(){document.querySelectorAll('[data-crew]').forEach(el=>{const C=LIVE.on?crewOf(el.dataset.crew):[];el.innerHTML=C.slice(0,6).map(a=>`<div class="mate">${faceHTML(a)}<small>${esc(a.name||a.id)}</small></div>`).join('')})}
+const LBL={working:'Working',waiting:'Waiting on you',idle:'Standing by',done:'Done'};
+function crewPanel(room){const C=LIVE.on?crewOf(room):[];if(!C.length)return '';
+  return `<div class="crewlist">${C.map(a=>`<div class="cm">${faceHTML(a)}<div><b>${esc(a.name||a.id)} · ${esc(LBL[a.light]||'Standing by')}</b>${a.does?`<div class="does">${esc(a.does)}</div>`:''}${a.now?`<div class="nowl">${esc(a.now)}</div>`:''}${(a.waitingOnMichael||[]).length?`<ul>${a.waitingOnMichael.slice(0,4).map(w=>`<li>${esc(w)}</li>`).join('')}</ul>`:''}${a.look&&!safeUrl(a.avatar)?`<div class="look">Casting: ${esc(a.look)}</div>`:''}</div></div>`).join('')}</div>`}
+let DB=null;
+const TONE={cash:'st-cut',equity:'st-waiting',drift:'st-delayed',ok:'st-delivered',wait:'st-waiting',review:'st-review',hot:'st-boarding'};
+function isLive(id){
+  if(!LIVE.on) return false;
+  if(id!=='screening'&&id!=='atrium'&&crewOf(id).length) return true;
+  if(id==='ceo') return !!(LIVE.briefing||LIVE.agents.ceo);
+  if(id==='atrium') return !!LIVE.projects;
+  if(id==='screening') return true;
+  return !!LIVE.agents[id];
+}
+const when=iso=>{try{const d=new Date(iso);return isNaN(d)?'':d.toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'})}catch(e){return ''}};
+const OFF={ceo:'First real briefing lands at 5:47 AM tomorrow.',business:'The Lookout comes online next: lead hunting and outreach drafts.',producer:'The Producer comes online in build step 4.','edit-bay':'The Editor comes online in build step 4, when your Mac is on.',marketing:'Marketing comes online in build step 2.',newsroom:'The Newsroom comes online in build step 2.'};
+function offScreen(id){
+  if(id==='edit-bay') return `<div class="wallq">${[1,2,3].map(n=>`<div class="wq"><small>STATION ${n}</small><b style="color:#ecdfc666">Idle</b><i><u style="width:0"></u></i></div>`).join('')}</div>`;
+  if(id==='producer') return `<div class="sheet"><h4>THIS WEEK</h4><div class="day" style="grid-column:1/-1;color:#ecdfc666"><small>OFF DUTY</small>The Producer comes online in step 4</div></div>`;
+  if(id==='business') return `<div class="holo">${[['Radar',40,95,24],['Pipeline',225,20,12],['Today',415,-5,0],['Proof',605,20,-12],['Best hour',790,95,-24]].map(([k,l,t,ry])=>`<div class="hp" style="left:${l}px;top:${t}px;--ry:${ry}deg;opacity:.55"><small>${k}</small><b>—</b><span>Off duty</span></div>`).join('')}</div>`;
+  return '';
+}
+function newsHTML(){
+  const A=LIVE.agents.newsroom, T=(A&&Array.isArray(A.tiles)?A.tiles:[]).slice(0,6);
+  while(T.length<6) T.push({k:'—',v:'—'});
+  return `<div class="feeds sm">${T.map(x=>{const v=String(x.v??'—');return `<div class="feed${x.hot?' hot':''}">${esc(String(x.k||'').toUpperCase())}<b${v.length>7?' style="font-size:15px"':''}>${esc(v)}</b></div>`}).join('')}</div>`;
+}
+function liveRows(list){return rowsHTML((list||[]).slice(0,12).map(x=>[x.t||'',x.s||'',x.tone&&TONE[x.tone]?`<span class="pill ${TONE[x.tone]}">${esc(x.r||x.tone.toUpperCase())}</span>`:esc(x.r||'')]))}
+
+const cls = s => ({'IN CUT':'st-cut','BOARDING':'st-boarding','IN REVIEW':'st-review','DELIVERED':'st-delivered','DONE':'st-delivered','DELAYED':'st-delayed','DUE SOON':'st-delayed','SENT BACK':'st-delayed','WAITING':'st-waiting'})[s]||'st-review';
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+const flap = (txt,len) => { const t=String(txt).toUpperCase().padEnd(len||txt.length,' ').slice(0,len||txt.length); return '<span class="cells">'+[...t].map(c=>'<i data-c="'+esc(c)+'">'+(c===' '?'&nbsp;':esc(c))+'</i>').join('')+'</span>'; };
+
+/* ---------- rooms ----------
+   quad = screen corners in the source image, as fractions of width/height: TL, TR, BR, BL */
+const R = [
+ {id:'atrium', name:'The Atrium', div:'Common area', agent:'Chief of staff', img:'img/atrium.jpg',
+  light:'working', now:'Keeping the departures board current across all three divisions.',
+  screens:[
+   {q:[[235,548],[1275,548],[1275,610],[235,610]],src:1280, w:900,h:56, html:()=>'<div class="waterfx"><i></i><i class="b"></i></div>'},
+   {q:[[222,176],[1094,163],[1094,543],[222,543]],src:1280, w:1000,h:430, html:()=>boardHTML()}]},
+ {id:'ceo', name:"CEO's Office", div:'Leadership', agent:'CEO agent', img:'img/ceo.jpg', vid:'vid/ceo-office.mp4', poster:'img/ceo-office-poster.jpg',
+  light:'working', now:'Writing tomorrow’s 6:00 AM briefing and checking how your hours split between cash work and owned work.',
+  screens:[{q:[[1000,290],[1570,275],[1570,690],[1000,700]],src:1792, w:600,h:440, html:()=>ceoGlass()}]},
+ {id:'edit-bay', name:'Edit Bay', div:'Studio & Services', agent:'Three editors · DaVinci Resolve', img:'img/edit.jpg',
+  light:'working', now:'Three editors, three stations. Station three has no live cut right now, so it’s looping the archive instead of sitting dark.',
+  screens:[{q:[[372,343],[908,343],[908,413],[372,413]],src:1280, w:1000,h:140, html:()=>LIVE.on&&!isLive('edit-bay')?offScreen('edit-bay'):`<div class="wallq"><div class="wq"><small>STATION 1</small><b>BMAC Recap · Cut 3</b><i><u style="width:64%"></u></i></div><div class="wq"><small>STATION 2</small><b>HT Short · Assembly</b><i><u style="width:30%"></u></i></div><div class="wq"><small>STATION 3</small><b>No live cut · archive loop</b><i><u style="width:100%;background:var(--plaster-faint)"></u></i></div></div>`}]},
+ {id:'producer', name:"Producer's Desk", div:'Services', agent:'Producer agent', img:'img/producer.jpg',
+  light:'working', now:'Tracking the week’s shoots and hunting new content angles for Hollywood Today and Studio.',
+  screens:[{q:[[120,258],[588,290],[588,394],[120,422]],src:1280, w:1000,h:380, html:()=>!isLive('producer')?offScreen('producer'):`<div class="sheet"><h4>THIS WEEK</h4>${(LIVE.agents.producer.rows||[]).slice(0,8).map(x=>`<div class="day"><small>${esc(x.r||'')}</small>${esc(x.t||'')}</div>`).join('')}</div>`}]},
+ {id:'marketing', name:'Marketing & Socials', div:'Media', agent:'Marketing agent · PostFast', img:'img/marketing.jpg',
+  light:'working', now:'Queuing tomorrow’s posts. Four of six daily slots filled.',
+  screens:[
+   [[203,118],[310,136],[310,368],[203,372]],[[345,160],[437,170],[437,398],[345,400]],[[466,185],[551,192],[551,398],[466,400]],[[577,205],[654,210],[654,431],[577,431]],
+   [[203,372],[310,374],[310,580],[203,590]],[[345,382],[437,382],[437,610],[345,618]],[[466,388],[551,388],[551,626],[466,634]],[[577,396],[654,396],[654,648],[577,655]]
+  ].map((q,i)=>({q,src:1792,w:300,h:560,html:()=>postHTML(i)}))},
+ {id:'business', name:'The Lookout', div:'Business development', agent:'Lead team · 4 women, 2 men', img:'img/lookout.jpg',
+  light:'waiting', now:'Six on the floor working leads — calls, research, two heads-down over one laptop on outreach. Latest draft is waiting in the screening room.',
+  screens:[
+   {q:[[676,412],[844,412],[844,460],[676,460]],src:1280, w:260,h:72, html:()=>'<div class="waterfx"><i></i><i class="b"></i></div>'},
+   {q:[[240,250],[1040,250],[1040,590],[240,590]],src:1280, w:1000,h:425, html:()=>LIVE.on&&!isLive('business')?offScreen('business'):`<div class="holo">
+   <i class="beam" style="left:125px;height:170px"></i><i class="beam" style="left:310px;height:250px"></i><i class="beam" style="left:500px;height:285px"></i><i class="beam" style="left:690px;height:250px"></i><i class="beam" style="left:875px;height:170px"></i>
+   <div class="hp" style="left:40px;top:95px;--ry:24deg"><small>Radar</small><b>14 leads</b><span>4 warm · real estate leads</span><svg viewBox="0 0 140 36" width="100%" height="30"><circle cx="18" cy="20" r="4" fill="#ffd08a"/><circle cx="44" cy="10" r="3" fill="#ffd08a99"/><circle cx="66" cy="24" r="5" fill="#ffd08a"/><circle cx="92" cy="14" r="3" fill="#ffd08a99"/><circle cx="116" cy="22" r="4" fill="#ffd08a"/><circle cx="132" cy="8" r="2" fill="#ffd08a66"/></svg></div>
+   <div class="hp" style="left:225px;top:20px;--ry:12deg;animation-delay:-1.5s"><small>Pipeline</small><b>$18.4K</b><span>likely to land this month</span></div>
+   <div class="hp" style="left:415px;top:-5px;--ry:0deg;animation-delay:-3s"><small>Today</small><b>3 follow-ups</b><span>2 drafts waiting for your yes</span></div>
+   <div class="hp" style="left:605px;top:20px;--ry:-12deg;animation-delay:-4.5s"><small>Proof</small><b>+50K views</b><span>BMAC recap → use in nonprofit pitch</span></div>
+   <div class="hp" style="left:790px;top:95px;--ry:-24deg;animation-delay:-2.2s"><small>Best hour</small><b>Headshots</b><span>$210/hr this month</span></div></div>`}]},
+ {id:'newsroom', name:'Hollywood Today Newsroom', div:'Media', agent:'Two hosts · recording', img:'img/newsroom.jpg', vid:'vid/newsroom-hosts.mp4', poster:'img/newsroom-hosts-poster.jpg', loop:true,
+  light:'working', now:'Recording this week’s Hollywood Today podcast. Reel on the wall, stats beside it.',
+  screens:[{q:[[749,299],[1270,232],[1270,525],[749,469]],src:1280, w:760,h:360, html:()=>{
+   const side=LIVE.on?newsHTML():`<div class="feeds sm">
+    <div class="feed hot">SUBSCRIBERS<b>55.2K</b></div><div class="feed">TODAY<b>+214</b></div>
+    <div class="feed">TOP TRENDING<b style="font-size:17px;line-height:1.1">Red carpet archive</b></div><div class="feed">SEARCH RANK<b style="font-size:20px">↑ 4 terms</b></div>
+    <div class="feed hot">NEXT POST<b>7:30P</b></div><div class="feed">SHORTS QUEUED<b>6</b></div></div>`;
+   const reel=REEL?`<video class="studio-vid" muted loop autoplay playsinline src="${REEL}"></video>`:`<div class="reel-empty"><small>CINEMATIC REEL</small><b>Drop the file in chat</b><span>Under 30s · loops silent on this wall</span></div>`;
+   return `<div class="studio"><div class="studio-reel">${reel}</div><div class="studio-side">${side}</div></div>`;
+  }}]},
+ {id:'writers', name:"Writers' Room", div:'Studio', agent:'Story team', img:'', light:'idle', now:'', screens:[]},
+ {id:'screening', name:'Screening Amphitheater', div:'The greenlight', agent:'You', img:'img/screening.jpg',
+  light:'waiting', now:'',
+  screens:[{q:[[380,262],[940,262],[940,478],[380,478]],src:1280, w:1000,h:372, html:()=>{const n=S.queue[0]; const info=n?`<small>NOW SCREENING</small><b>${esc(n.title.toUpperCase())}</b><span>${esc(n.note.toUpperCase())}</span>`:`<small>NOW PLAYING</small><b>MILES OF LOVE</b><span>A FILM DEDICATED TO MY SON</span>`; return `<div class="scr"><video class="scr-vid" src="vid/miles-of-love.mp4" poster="img/miles-of-love-poster.jpg" controls playsinline preload="metadata"></video><div class="scr-info">${info}</div></div>`; return n?`<div class="cine"><small>NOW SCREENING</small><b>${esc(n.title.toUpperCase())}</b><span>${esc(n.note.toUpperCase())}</span></div>`:`<div class="cine"><small>THE SCREEN IS CLEAR</small><b>NOTHING WAITING</b><span>EVERY CALL IS MADE</span></div>`}}]}
+];
+
+const REEL='';
+const POSTS=[
+ ['IG · 9:00A','Gala night in 30 seconds','Reel · BMAC'],['YT · 12:00P','The red carpet, 2014','Short · Hollywood Today'],['IG · 3:00P','Behind the lens','Reel · @lensfocused'],['TT · 6:00P','One question, ten stars','Short · Hollywood Today'],
+ ['OPEN SLOT','Fill from the archive?','Suggested'],['OPEN SLOT','Topanga at dawn','Suggested'],['IG · TUE','California voices','Reel · We Are California'],['YT · TUE','Black cinema pioneers','Short · Hollywood Today']];
+function daysTo(iso){const p=String(iso).split('-'),d=new Date(+p[0],+p[1]-1,+p[2]),t=new Date();t.setHours(0,0,0,0);return Math.round((d-t)/864e5)}
+function whenWord(n,iso){if(n<0)return 'overdue';if(n===0)return 'today';if(n===1)return 'tomorrow';const p=String(iso).split('-');return 'on '+new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})}
+/* done:true + doneAt keeps a deadline on the glass as "Done" for today and the next day, then it drops off. */
+function deadlineState(b){const all=((b&&b.deadlines)||[]).map(x=>Object.assign({n:daysTo(x.due)},x));const open=all.filter(x=>!x.done&&x.n>=-1).sort((a,c)=>a.n-c.n);const done=all.filter(x=>x.done&&x.doneAt&&daysTo(x.doneAt)>=-1);return {open,done,soon:open.filter(x=>x.n<=2)}}
+function deadlineTicker(b){const ds=deadlineState(b);return ds.open.slice(0,1).map(x=>'DEADLINE '+(x.short||x.t)+' due '+whenWord(x.n,x.due)).concat(ds.done.slice(0,1).map(x=>'DONE '+(x.short||x.t)+' '+(x.doneLabel||'done').toLowerCase()))}
+function ceoGlass(){
+  const b=LIVE.on&&LIVE.briefing;
+  const standing=`<p style="margin-top:10px;padding-top:10px;border-top:1px solid #ecdfc626"><small style="display:block;font-size:9px;letter-spacing:.2em;color:var(--amber);margin-bottom:4px">STANDING PRIORITY · DELEGATED TO THE LOOKOUT</small>You've got zero reviews anywhere while competitors show 49–175. You're not really competing with other production companies for search, you're competing with Clutch, ProductionHub and Sortlist for page one. Sequence: reviews first, then directory listings, then case studies on your own domain.</p>`;
+  if(!b&&LIVE.on) return `<div class="glass"><small>Briefing</small><h3>First briefing at dawn.</h3><p style="color:#fbf4e699">The CEO agent writes it at 5:47 AM from your Gmail, Calendar and the other agents’ reports.</p>${standing}</div>`;
+  if(!b) return `<div class="glass"><small>Today’s briefing</small><h3>Two calls need you.</h3><p>Greenlight the BMAC recap tonight. The invoice goes out the moment you do.</p><p>Bear Trip slipped a week. Studio time is under target.</p><p style="color:#f3d39d">3 new leads · 2 in the screening room</p>${standing}</div>`;
+  const ds=deadlineState(b), dl=ds.open, soon=ds.soon;
+  let head=b.headline||'Your briefing';
+  if(soon.length){const w=soon[0].n<0?'overdue':soon[0].n===0?'today':soon[0].n===1?'tomorrow':'this week';head=(soon.length===1?'One deadline ':soon.length+' deadlines ')+w+'.'}else if(ds.done.length&&!dl.length)head='All caught up.';
+  const L=b.lists||null, hasL=!!(L&&((L.life||[]).length||(L.company||[]).length));
+  const allLines=dl.slice(0,2).map(x=>x.t+' is due '+whenWord(x.n,x.due)+'. '+(x.pen||'')).concat(ds.done.slice(0,2).map(x=>'✓ '+x.t+': '+(x.doneLabel||'Done').toLowerCase()+'.')).concat(b.lines||[]);
+  const lines=allLines.slice(0,hasL?1:2).map(l=>{const ok=l.charAt(0)==='✓';return `<p style="${hasL?'font-size:16px;margin-bottom:8px;':''}${ok?'color:#b7d3a0;opacity:.85':''}">${esc(l)}</p>`}).join('');
+  const list=(title,arr)=>(arr&&arr.length)?`<div style="margin-top:8px"><small style="display:block;font-size:10px;letter-spacing:.24em;margin-bottom:3px">${esc(title)}</small>${arr.slice(0,5).map(t=>`<div style="font-size:16px;line-height:1.35"><span style="color:#f3d39d">○</span> ${esc(t)}</div>`).join('')}</div>`:'';
+  const lists=hasL?list('LIFE LIST',L.life)+list('POINT REYES',L.company):'';
+  const sp=hasL?standing.replace('margin-top:10px;padding-top:10px','font-size:12px;line-height:1.3;margin:8px 0 0;padding-top:8px'):standing;
+  const foot=b.footer&&!hasL?`<p style="color:#f3d39d">${esc(b.footer)}</p>`:'';
+  return `<div class="glass"${hasL?' style="padding:22px 30px;overflow:hidden"':''}><small>Briefing · ${esc(b.date||'')}</small><h3${hasL?' style="font-size:26px;margin:2px 0 8px"':''}>${esc(head)}</h3>${lines}${lists}${foot}${sp}</div>`;
+}
+function postHTML(i){
+  if(LIVE.on){const A=LIVE.agents.marketing,q=A&&Array.isArray(A.posts)?A.posts[i]:null;
+    const p=q?[q.slot||'',q.title||'',q.sub||'']:['OPEN SLOT','—','Nothing queued'];
+    return `<div class="vert"${q?'':' style="opacity:.5"'}><small>${esc(p[0])}</small><b>${esc(p[1])}</b><span>${esc(p[2])}</span></div>`}
+  const p=POSTS[i];return `<div class="vert"><small>${esc(p[0])}</small><b>${esc(p[1])}</b><span>${esc(p[2])}</span></div>`}
+
+function boardHTML(){
+  const rows=S.projects.map(p=>`<tr><td>${flap(p.name,22)}</td><td>${flap(p.div,8)}</td><td><span class="cells stat ${cls(p.status)}">${[...p.status.padEnd(9,' ')].map(c=>'<i data-c="'+esc(c)+'">'+(c===' '?'&nbsp;':esc(c))+'</i>').join('')}</span></td><td>${flap(p.due,5)}</td></tr>`).join('');
+  const waiting=S.queue.length;
+  const tk=LIVE.on&&LIVE.briefing&&Array.isArray(LIVE.briefing.ticker)&&LIVE.briefing.ticker.length
+    ? deadlineTicker(LIVE.briefing).concat(LIVE.briefing.ticker).slice(0,6).map(x=>{const s=String(x).toUpperCase(),i=s.indexOf(' ');return i>0?`<em>${esc(s.slice(0,i))}</em> ${esc(s.slice(i+1))}`:esc(s)}).join(' · ')+` · <em>SCREENING</em> ${waiting} AWAITING YOUR CALL`
+    : LIVE.on ? `<em>SCREENING</em> ${waiting} AWAITING YOUR CALL · <em>BRIEFING</em> 5:47 AM`
+    : `<em>LEADS</em> 3 NEW ·<em>YOUTUBE</em> +214 SUBS · <em>COMMENTS</em> 38 UNREAD · <em>INVOICES</em> 1 PAID · <em>SCREENING</em> ${waiting} AWAITING YOUR CALL`;
+  return `<div class="board" style="position:relative"><div class="bh"><b style="font-size:18px;letter-spacing:.2em">POINT REYES PRODUCTIONS</b><span>NOW IN PRODUCTION · <span data-clock>--:--</span></span><span>${isLive('atrium')?'LIVE':'SAMPLE'}</span></div>
+  <table class="bt"><tr><th>PROJECT</th><th>DIVISION</th><th>STATUS</th><th>DUE</th></tr>${rows}</table>
+  <div class="tick">${tk}</div></div>`;
+}
+
+/* ---------- perspective fit ---------- */
+function solve(A,b){const n=b.length;for(let i=0;i<n;i++){let m=i;for(let r=i+1;r<n;r++)if(Math.abs(A[r][i])>Math.abs(A[m][i]))m=r;[A[i],A[m]]=[A[m],A[i]];[b[i],b[m]]=[b[m],b[i]];for(let r=i+1;r<n;r++){const f=A[r][i]/A[i][i];for(let c=i;c<n;c++)A[r][c]-=f*A[i][c];b[r]-=f*b[i];}}const x=new Array(n);for(let i=n-1;i>=0;i--){let s=b[i];for(let c=i+1;c<n;c++)s-=A[i][c]*x[c];x[i]=s/A[i][i];}return x}
+function matrixFor(w,h,q){const src=[[0,0],[w,0],[w,h],[0,h]];const A=[],b=[];for(let i=0;i<4;i++){const[x,y]=src[i],[u,v]=q[i];A.push([x,y,1,0,0,0,-u*x,-u*y]);b.push(u);A.push([0,0,0,x,y,1,-v*x,-v*y]);b.push(v);}const[a,bb,c,d,e,f,g,hh]=solve(A,b);return `matrix3d(${a},${d},0,${g},${bb},${e},0,${hh},0,0,1,0,${c},${f},0,1)`}
+
+/* walk order: morning in the atrium to night in the amphitheater */
+const WALK=['atrium','marketing','producer','business','ceo','newsroom','edit-bay','writers','screening'];
+R.sort((a,b)=>WALK.indexOf(a.id)-WALK.indexOf(b.id));
+
+/* ---------- build stage ---------- */
+const stage=document.getElementById('stage'), rail=document.getElementById('rail'), detail=document.getElementById('detail');
+R.forEach((r,ri)=>{
+  const el=document.createElement('div');el.className='room';el.id='room-'+r.id;
+  el.innerHTML=(!r.img&&!r.vid)?`<div class="plate-css"></div><div class="tint"></div>`:r.vid?`<video class="plate" ${r.loop?'loop':''} src="${r.vid}" poster="${r.poster||r.img}" muted playsinline preload="auto" aria-label="${esc(r.name)}"></video><div class="tint"></div>`:`<img src="${r.img}" alt="${esc(r.name)}" ${ri? 'loading="lazy"':''}><div class="tint"></div>`;
+  r.screens.forEach((s,si)=>{const d=document.createElement('div');d.className='screen';d.style.width=s.w+'px';d.style.height=s.h+'px';d.dataset.r=ri;d.dataset.s=si;el.appendChild(d)});
+  const cw=document.createElement('div');cw.className='crew';cw.dataset.crew=r.id;el.appendChild(cw);
+  const lab=document.createElement('div');lab.className='label';lab.innerHTML=`<span class="light ${r.light}" data-light="${r.id}"></span><b>${esc(r.name)}</b><em data-tag="${r.id}"></em>`;el.appendChild(lab);
+  stage.insertBefore(el,stage.firstChild);
+  const btn=document.createElement('button');btn.type='button';btn.dataset.id=r.id;btn.innerHTML=`<span class="light ${r.light}" data-light="${r.id}"></span>${esc(r.name)}`;btn.onclick=()=>go(r.id);rail.appendChild(btn);
+});
+function renderScreens(){stage.querySelectorAll('.screen').forEach(d=>{const r=R[d.dataset.r],s=r.screens[d.dataset.s];d.innerHTML=s.html()})}
+function fit(){const W=stage.clientWidth,H=stage.clientHeight;stage.querySelectorAll('.screen').forEach(d=>{const r=R[d.dataset.r],s=r.screens[d.dataset.s];const sw=s.src,sh=s.src*9/16;const q=s.q.map(([x,y])=>[x/sw*W,y/sh*H]);d.style.transform=matrixFor(s.w,s.h,q)})}
+
+/* ---------- detail panels ---------- */
+function rowsHTML(list){return `<div class="rows">${list.map(x=>`<div class="row"><div class="t">${esc(x[0])}</div><div class="s">${esc(x[1])}</div><div class="r">${x[2]}</div></div>`).join('')}</div>`}
+function detailHTML(r){
+  const A=LIVE.on?LIVE.agents[r.id]:null;
+  const head=`<div><div class="eyebrow">${esc(r.div)}${LIVE.on&&!isLive(r.id)?'<em>Off duty</em>':''}</div><h2>${esc(r.name)}</h2><div class="agent"><span class="light ${r.light}"></span>${esc(r.agent)} · ${({working:'Working',waiting:'Waiting on you',idle:'Standing by',done:'Done'})[r.light]}</div>`+(r.now?`<div class="now"><small>Currently working on</small>${esc(r.now)}</div>`:'');
+  let body='';
+  const B=LIVE.on&&LIVE.briefing;
+  if(r.id==='ceo'&&B){
+    const h=B.hours||{};
+    const bar=(k,lab,c)=>h[k]==null?'':`<div class="bar"><span>${lab}</span><i><b style="width:${Math.max(0,Math.min(100,+h[k]||0))}%${c?';background:'+c:''}"></b></i><span>${Math.round(+h[k]||0)}%</span></div>`;
+    const under=h.studio!=null&&h.studioTarget!=null&&+h.studio<+h.studioTarget;
+    body=`<div class="eyebrow">Briefing · ${esc(B.date||'')}</div>`+liveRows((B.lines||[]).map(l=>({t:l})))
+      +((h.services!=null||h.studio!=null)?`<div class="eyebrow" style="margin-top:22px">Where your hours went this week</div><div class="bars">${bar('services','Services')}${bar('media','Media')}${bar('studio','Studio',under?'var(--alert)':'')}</div>`:'')
+      +`<div style="margin-top:18px">`+liveRows([...(B.pays||[]).map(x=>({...x,tone:'cash',r:'CASH'})),...(B.equity||[]).map(x=>({...x,tone:'equity',r:'EQUITY'})),...(B.flags||[]).map(x=>({...x,tone:'drift',r:'FLAG'}))])+`</div>`
+      +(B.generatedAt?`<div class="stamp">Written ${esc(when(B.generatedAt))}</div>`:'');
+  } else if(LIVE.on&&r.id!=='screening'&&r.id!=='atrium'&&crewOf(r.id).length){
+    const C=crewOf(r.id);
+    body=liveRows(C.flatMap(a=>(Array.isArray(a.rows)&&a.rows.length?a.rows.slice(0,4):[{t:a.name||a.id,s:a.now||'',r:(LBL[a.light]||'').toUpperCase()}])))
+      +`<div class="stamp">Updated ${esc(when(C.map(a=>a.updatedAt||'').sort().pop()))}</div>`;
+  } else if(A&&r.id!=='screening'){
+    body=liveRows(A.rows)+(A.updatedAt?`<div class="stamp">Updated ${esc(when(A.updatedAt))}</div>`:'');
+  } else if(LIVE.on&&r.id!=='atrium'&&r.id!=='screening'){
+    body=`<div class="eyebrow">Off duty</div><p style="color:var(--plaster-dim);max-width:52ch">${esc(OFF[r.id]||'Not on duty yet.')} Nothing on this room's screens is real until then.</p>`;
+  } else switch(r.id){
+   case 'atrium': body=rowsHTML(S.projects.map(p=>[p.name,p.div.charAt(0)+p.div.slice(1).toLowerCase(),`<span class="pill ${cls(p.status)}">${esc(p.status)}</span><br><span style="opacity:.6">${esc(p.due)}</span>`]));break;
+   case 'ceo': body=`<div class="eyebrow">Where your hours went this week</div><div class="bars">
+     <div class="bar"><span>Services</span><i><b style="width:62%"></b></i><span>62%</span></div>
+     <div class="bar"><span>Media</span><i><b style="width:20%"></b></i><span>20%</span></div>
+     <div class="bar"><span>Studio</span><i><b style="width:18%;background:var(--alert)"></b></i><span>18%</span></div></div>`+rowsHTML([
+     ['What pays this month','BMAC recap invoice, We Are California delivery','<span class="pill st-cut">CASH</span>'],
+     ['What builds equity you own','Bear Trip recut, Hollywood Today Shorts','<span class="pill st-waiting">EQUITY</span>'],
+     ['Flag','Studio time is under your 25% target','<span class="pill st-delayed">DRIFT</span>']]);break;
+   case 'edit-bay': body=rowsHTML([['Station 1 · BMAC Gala Recap','Cut 3 rendering in Resolve','64%'],['Station 2 · Hollywood Today Short','Assembly from the interview archive','30%'],['Station 3 · Fab TV','Color delivered through Frame.io','<span class="pill st-delivered">DONE</span>']]);break;
+   case 'producer': body=rowsHTML([['BMAC recap to client','Wednesday, after your greenlight','WED'],['We Are California review','Client call','THU 11A'],['We Are California delivery','Final files','FRI'],['Bear Trip pickups','Two scenes, Topanga','MON']]);break;
+   case 'marketing': body=rowsHTML(POSTS.map(p=>[p[1],p[2],esc(p[0])]));break;
+   case 'business': body=`<div class="eyebrow">Where your next paycheck comes from</div>`+rowsHTML([['Radar','14 leads across brand work, real estate, headshots, nonprofits and weddings','4 WARM'],['Pipeline','New 3 · Contacted 5 · Proposal 2 · Won 1','$18.4K'],['Today','Follow up with the law office; Malibu outreach waits in the screening room','<span class="pill st-waiting">YOUR CALL</span>'],['Proof','BMAC recap passed 50K views, suggested for the nonprofit gala pitch','<span class="pill st-cut">USE IT</span>'],['Best hour','Headshots pay $210/hr this month; weddings pay $85/hr','<span class="pill st-delivered">CHASE</span>']]);break;
+   case 'newsroom': body=rowsHTML([['Subscribers','Hollywood Today TV','55.2K'],['Shorts queued','From the red carpet archive','6'],['Comments to answer','Across YouTube and Instagram','38'],['Search titles rewritten','This week','4']]);break;
+   case 'screening':
+     const n=S.queue[0];
+     body= n?`<div class="eyebrow">Now screening</div><h2 style="font-size:26px;margin:4px 0 2px">${esc(n.title)}</h2><div class="agent">${esc(n.note)}</div>
+       <div class="actions"><button class="btn" id="sendback" type="button">Send back</button><button class="btn go" id="greenlight" type="button">Greenlight</button></div>
+       <div style="margin-top:22px">${rowsHTML(S.queue.slice(1).map((q,i)=>['Up next · '+q.title,q.note,'#'+(i+2)]))}</div>`
+       :`<div class="eyebrow">The screen is clear</div><p style="color:var(--plaster-dim)">Every call is made. Decisions below.</p>`;
+     if(S.decided.length) body+=`<div style="margin-top:18px">${rowsHTML(S.decided.map(d=>[d.title,d.ok?'Greenlit':'Sent back',`<span class="pill ${d.ok?'st-delivered':'st-delayed'}">${d.ok?'GREENLIT':'SENT BACK'}</span>`]))}</div>`;
+     break;
+  }
+  return head+crewPanel(r.id)+'</div><div>'+body+'</div>';
+}
+
+/* ---------- navigation ---------- */
+let cur=-1, busy=false;
+/* filmed walk-throughs between neighbouring rooms */
+const CLIPS={'atrium>marketing':'vid/atrium-marketing.mp4','marketing>atrium':'vid/marketing-atrium.mp4',
+  'marketing>producer':'vid/marketing-producer.mp4','producer>marketing':'vid/producer-marketing.mp4',
+  'producer>business':{rise:1},'business>producer':{rise:1},
+  'business>ceo':'vid/lookout-ceo.mp4','ceo>business':'vid/ceo-lookout.mp4',
+  'ceo>newsroom':'vid/ceo-newsroom.mp4','newsroom>ceo':'vid/newsroom-ceo.mp4',
+  'newsroom>edit-bay':'vid/newsroom-edit.mp4','edit-bay>newsroom':'vid/edit-newsroom.mp4'};
+/* where the camera flies through in each room: the skylight / oculus */
+const FOCUS={producer:[.5,.19],business:[.51,.15]};
+function fly(i,push){
+  busy=true;
+  const a=stage.querySelector('#room-'+R[cur].id), b=stage.querySelector('#room-'+R[i].id);
+  const fa=FOCUS[R[cur].id]||[.5,.3], fb=FOCUS[R[i].id]||[.5,.3];
+  const flash=document.createElement('div');flash.className='flash';stage.appendChild(flash);
+  a.classList.add('still'); a.style.transformOrigin=`${fa[0]*100}% ${fa[1]*100}%`;
+  const up=a.animate([{transform:'scale(1)'},{transform:'scale(5)'}],{duration:1400,easing:'cubic-bezier(.55,0,.9,.55)',fill:'forwards'});
+  flash.animate([{opacity:0},{opacity:0,offset:.5},{opacity:1}],{duration:1400,fill:'forwards'}).onfinish=()=>{
+    show(i,push,true); up.cancel(); a.style.transformOrigin=''; cancelPush(b);
+    b.style.transformOrigin=`${fb[0]*100}% ${fb[1]*100}%`;
+    b.animate([{transform:'scale(3.4)'},{transform:'scale(1)'}],{duration:1900,easing:'cubic-bezier(.12,.6,.2,1)'}).onfinish=()=>{b.style.transformOrigin='';pushIn(b,R[i].id)};
+    flash.animate([{opacity:1},{opacity:0}],{duration:1200,easing:'ease-out',fill:'forwards'}).onfinish=()=>{flash.remove();busy=false};
+  };
+}
+const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+function go(id,push){
+  const i=Math.max(0,R.findIndex(r=>r.id===id));
+  if(i===cur||busy) return;
+  const clip=cur>=0 && CLIPS[R[cur].id+'>'+R[i].id];
+  const cr=cur>=0 && CRANE[R[cur].id+'>'+R[i].id];
+  if(cr && !reduced()) return crane(i,push,cr);
+  if(clip && !reduced()) return clip.rise ? fly(i,push) : walk(clip,i,push);
+  show(i,push,false);
+}
+function walk(src,i,push){
+  busy=true;
+  const wrap=document.createElement('div');wrap.className='walk';
+  wrap.innerHTML=`<video muted playsinline preload="auto" src="${src}"></video><div class="walk-cap">Walking to <b>${esc(R[i].name)}</b></div>`;
+  stage.appendChild(wrap);
+  const v=wrap.querySelector('video');
+  let done=false;
+  const finish=()=>{ if(done) return; done=true; show(i,push,true); wrap.classList.add('out'); setTimeout(()=>{wrap.remove();busy=false},450); };
+  const fail=setTimeout(finish,3000);
+  v.addEventListener('playing',()=>{clearTimeout(fail);wrap.classList.add('in')},{once:true});
+  v.addEventListener('ended',finish,{once:true});
+  v.addEventListener('error',finish,{once:true});
+  const p=v.play(); if(p&&p.catch) p.catch(finish);
+}
+/* a second, closer stop inside a room: push in about halfway and hold */
+const PUSH={producer:{o:[.56,.62],s:1.22}};
+function pushIn(el,id){const p=PUSH[id];if(!p||reduced())return;cancelPush(el);el.classList.add('still');el.style.transformOrigin=`${p.o[0]*100}% ${p.o[1]*100}%`;el._push=el.animate([{transform:'scale(1)'},{transform:`scale(${p.s})`}],{duration:4200,delay:700,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'})}
+function cancelPush(el){if(el&&el._push){el._push.cancel();el._push=null;el.style.transformOrigin=''}}
+/* crane: rise straight up out of one room, level, into an exterior shot, then push into the next room */
+const CRANE={
+  'producer>business':{ext:'img/lookout-ext.jpg',clip:'vid/ext-lookout.mp4',target:[.5,.55]},
+  'business>producer':{ext:'img/lookout-ext.jpg',clip:'vid/lookout-ext.mp4',down:true},
+  'edit-bay>screening':{ext:'img/amph-ext.jpg',pre:'vid/edit-aerial.mp4',clip:'vid/aerial-amph.mp4',target:[.5,.5]},
+  'screening>edit-bay':{ext:'img/amph-ext.jpg',clip:'vid/amph-aerial.mp4',down:true}};
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+/* play a clip inside a layer; resolves true if it actually played to the end */
+function playIn(layer,src){return new Promise(res=>{const v=document.createElement('video');v.muted=true;v.playsInline=true;v.preload='auto';v.src=src;v.className='cv';layer.appendChild(v);let played=false,done=false;const fin=()=>{if(done)return;done=true;res(played?v:(v.remove(),null))};const t=setTimeout(fin,3500);v.addEventListener('playing',()=>{played=true;clearTimeout(t);v.style.opacity=1},{once:true});v.addEventListener('ended',fin,{once:true});v.addEventListener('error',fin,{once:true});const p=v.play();if(p&&p.catch)p.catch(fin)})}
+async function crane(i,push,c){
+  busy=true;
+  const a=stage.querySelector('#room-'+R[cur].id), b=stage.querySelector('#room-'+R[i].id);
+  const ext=document.createElement('div');ext.className='ext';
+  ext.innerHTML=`<img src="${c.ext}" alt=""><div class="walk-cap">${c.down?'Down to':'Rising to'} <b>${esc(R[i].name)}</b></div>`;
+  const T=2900, ez='cubic-bezier(.45,0,.25,1)';
+  if(!c.down){
+    /* rise straight up out of the room into the aerial view, then fly in */
+    stage.appendChild(ext);
+    let down={cancel(){}};
+    const pre=c.pre?await (async()=>{const im=ext.querySelector('img');im.style.opacity=0;const pv=await playIn(ext,c.pre);im.style.opacity=1;if(pv)pv.remove();return pv})():null;
+    if(!pre){
+      down=a.animate([{translate:'0 0'},{translate:'0 100%'}],{duration:T,easing:ez,fill:'forwards'});
+      ext.animate([{translate:'0 -100%'},{translate:'0 0'}],{duration:T,easing:ez,fill:'forwards'});
+      await wait(T+100);
+    }
+    const v=c.clip?await playIn(ext,c.clip):null;
+    a.style.transition='none'; show(i,push,true); cancelPush(b); down.cancel(); setTimeout(()=>a.style.transition='',50);
+    if(v){ ext.animate([{opacity:1},{opacity:0}],{duration:420,easing:'ease-in-out',fill:'forwards'}).onfinish=()=>{ext.remove();busy=false;pushIn(b,R[i].id)}; return; }
+    /* fallback if the clip can't play: push through */
+    ext.style.transformOrigin=`${c.target[0]*100}% ${c.target[1]*100}%`;
+    ext.animate([{transform:'scale(1)',opacity:1},{transform:'scale(3.6)',opacity:0}],{duration:1300,easing:'cubic-bezier(.5,0,.8,.4)',fill:'forwards'}).onfinish=()=>{ext.remove();busy=false};
+    return;
+  }
+  /* reverse: fly back out of the pavilion, then crane straight down into the room */
+  const img=ext.querySelector('img'); img.style.opacity=0; stage.appendChild(ext);
+  const v=await playIn(ext,c.clip);
+  if(v){
+    await Promise.all([
+      v.animate([{opacity:1},{opacity:0}],{duration:420,easing:'ease-in-out',fill:'forwards'}).finished,
+      img.animate([{opacity:0},{opacity:1}],{duration:420,easing:'ease-in-out',fill:'forwards'}).finished
+    ]);
+    v.remove();
+  } else { img.style.opacity=1; }
+  a.style.transition='none'; show(i,push,true); cancelPush(b); setTimeout(()=>a.style.transition='',50);
+  ext.animate([{translate:'0 0'},{translate:'0 -100%'}],{duration:T,easing:ez,fill:'forwards'});
+  b.animate([{translate:'0 100%'},{translate:'0 0'}],{duration:T,easing:ez}).onfinish=()=>{ext.remove();busy=false;pushIn(b,R[i].id)};
+}
+function show(i,push,arrived){
+  cur=i;
+  stage.querySelectorAll('.room').forEach(el=>{if(el.id!=='room-'+R[i].id)cancelPush(el);el.classList.toggle('on',el.id==='room-'+R[i].id);el.classList.toggle('still',!!arrived&&el.id==='room-'+R[i].id)});
+  pushIn(stage.querySelector('#room-'+R[i].id),R[i].id);
+  stage.querySelectorAll('.room video.plate').forEach(v=>{if(v.closest('.room').id==='room-'+R[i].id){v.currentTime=0;const p=v.play();if(p&&p.catch)p.catch(()=>{})}else v.pause()});
+  rail.querySelectorAll('button').forEach(b=>b.setAttribute('aria-current',b.dataset.id===R[i].id));
+  const b=rail.querySelector(`[data-id="${R[i].id}"]`); if(b&&b.scrollIntoView) b.scrollIntoView({block:'nearest',inline:'nearest'});
+  detail.innerHTML=detailHTML(R[i]); bindDetail();
+  if(R[i].id==='atrium') flapIn();
+  if(push!==false && location.hash.slice(1)!==R[i].id){ try{history.replaceState(null,'','#'+R[i].id)}catch(e){location.hash=R[i].id} }
+}
+const step=d=>go(R[(cur+d+R.length)%R.length].id);
+document.getElementById('prev').onclick=()=>step(-1);
+document.getElementById('next').onclick=()=>step(1);
+document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea'))return;if(e.key==='ArrowUp'){var bb=document.getElementById('briefback');if(bb)bb.focus()}if(e.key==='Escape')location.href='/tv/';if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1)});
+window.addEventListener('hashchange',()=>go(location.hash.slice(1),false));
+
+/* ---------- greenlight ---------- */
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove('show'),2800)}
+async function decide(ok){
+  if(LIVE.on&&DB){
+    const n=S.queue[0]; if(!n) return;
+    document.querySelectorAll('#greenlight,#sendback').forEach(b=>b.disabled=true);
+    try{
+      await DB.doc('screening/'+n.id).update({status:ok?'greenlit':'sentback',decidedAt:new Date().toISOString()});
+      toast(ok?`Greenlit. ${n.title} goes back to its agent to finish.`:`Sent back. ${n.title} returns to its agent.`);
+    }catch(e){
+      toast(e&&e.code==='invalid_argument'?'Only Michael can make this call.':'Couldn’t save that call. Try again.');
+      document.querySelectorAll('#greenlight,#sendback').forEach(b=>b.disabled=false);
+    }
+    return;
+  }
+  const n=S.queue.shift(); if(!n) return;
+  S.decided.unshift({title:n.title,ok});
+  const p=S.projects.find(p=>p.id===n.id);
+  if(p){p.status=ok?'DELIVERED':'SENT BACK';p.due=ok?'DONE':'REDO';}
+  const scr=R.find(r=>r.id==='screening'); scr.light=S.queue.length?'waiting':'done';
+  if(n.id==='out'){const bz=R.find(r=>r.id==='business');bz.light=ok?'working':'working';bz.now=ok?'Outreach approved. Saved as a Gmail draft for you to send.':'Rewriting the Malibu outreach with your notes.'}
+  save(); renderScreens(); fit(); syncLights();
+  detail.innerHTML=detailHTML(scr); bindDetail();
+  toast(ok? `Greenlit. ${n.title} moves to Delivered on the board.` : `Sent back. ${n.title} returns to its team.`);
+}
+function bindDetail(){const g=document.getElementById('greenlight'),s=document.getElementById('sendback');if(g)g.onclick=()=>decide(true);if(s)s.onclick=()=>decide(false)}
+function syncLights(){R.forEach(r=>document.querySelectorAll(`[data-light="${r.id}"]`).forEach(l=>l.className='light '+r.light))}
+document.getElementById('reset').onclick=()=>{S=JSON.parse(JSON.stringify(DEFAULT));save();R.find(r=>r.id==='screening').light='waiting';const bz=R.find(r=>r.id==='business');bz.light='waiting';bz.now='Drafted outreach to a Malibu listing agent. It’s waiting in the screening room.';syncLights();renderScreens();fit();const id=R[cur].id;cur=-1;go(id,false);toast('Sample data reset.')};
+
+/* ---------- background music: plays muted on load, unmutes+fades in on first interaction ---------- */
+(function(){
+  const dub=document.getElementById('bgm'), rainEl=document.getElementById('rain'), btn=document.getElementById('soundBtn');
+  const bgm={get volume(){return dub.volume},set volume(v){dub.volume=v;rainEl.volume=v},get muted(){return dub.muted},set muted(m){dub.muted=m;rainEl.muted=m},play(){rainEl.play().catch(()=>{});return dub.play()}};
+  const TARGET=.09; let unlocked=false, fading=null;
+  bgm.volume=0;
+  const tryPlay=()=>{const p=bgm.play();if(p&&p.catch)p.catch(()=>{})};
+  tryPlay();
+  function fadeTo(v,ms){
+    if(fading) cancelAnimationFrame(fading);
+    const from=bgm.volume, t0=performance.now();
+    (function step(t){const k=Math.max(0,Math.min(1,(t-t0)/ms));bgm.volume=from+(v-from)*k;if(k<1)fading=requestAnimationFrame(step);else fading=null})(t0);
+  }
+  function unmute(){
+    if(unlocked) return; unlocked=true;
+    bgm.muted=false; tryPlay(); fadeTo(TARGET,1800);
+    btn.setAttribute('aria-pressed','true');
+  }
+  btn.addEventListener('pointerdown',e=>e.stopPropagation());
+  btn.onclick=()=>{
+    if(!unlocked){unmute();return}
+    if(bgm.muted||bgm.volume===0){bgm.muted=false;tryPlay();fadeTo(TARGET,500);btn.setAttribute('aria-pressed','true')}
+    else{fadeTo(0,350);setTimeout(()=>bgm.muted=true,360);btn.setAttribute('aria-pressed','false')}
+  };
+  ['pointerdown','keydown'].forEach(ev=>window.addEventListener(ev,unmute,{once:true}));
+})();
+
+/* restore lights from saved state */
+if(!S.queue.length) R.find(r=>r.id==='screening').light='done';
+if(S.decided.some(d=>d.title==='Outreach Draft')){const bz=R.find(r=>r.id==='business');bz.light='working';bz.now='Working the rest of the pipeline.'}
+
+/* ---------- split-flap ---------- */
+const CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:';
+function flapIn(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cells=[...document.querySelectorAll('#room-atrium .cells i')];
+  cells.forEach((c,i)=>{const fin=c.dataset.c;if(fin===' ')return;let n=4+Math.floor(Math.random()*8)+Math.floor(i/40);const t=setInterval(()=>{if(--n<=0){clearInterval(t);c.textContent=fin;return}c.textContent=CH[Math.floor(Math.random()*CH.length)]},55)});
+}
+
+/* ---------- clock ---------- */
+function tick(){const d=new Date();const t=d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});document.getElementById('clock').textContent=d.toLocaleDateString([], {weekday:'short'}).toUpperCase()+' · '+t;document.querySelectorAll('[data-clock]').forEach(e=>e.textContent=t.toUpperCase())}
+
+/* ---------- live wiring ---------- */
+const LIGHTS=['working','waiting','idle','done'];
+const SAMPLE_ROOMS=R.map(r=>({id:r.id,light:r.light,now:r.now}));
+function syncTags(){R.forEach(r=>document.querySelectorAll(`[data-tag="${r.id}"]`).forEach(t=>t.textContent=LIVE.on&&!isLive(r.id)?(r.id==='atrium'?'Sample':'Off duty'):''))}
+let liveT;
+function applyLive(){clearTimeout(liveT);liveT=setTimeout(applyNow,60)}
+function applyNow(){
+  const scr=LIVE.screening||[];
+  LIVE.on=true;
+  const has=!!(LIVE.briefing||Object.keys(LIVE.agents).length||LIVE.projects||scr.length);
+  const chip=document.getElementById('mode');
+  if(has){chip.textContent='Live';chip.classList.add('live')}else{chip.textContent='No data';chip.classList.remove('live')}
+  document.getElementById('footnote').textContent=has?'Real numbers from your calendar, inbox and Instagram. Rooms marked Off duty have no agent behind them yet.':'No data connected. Nothing on this page is real until the feed loads.';
+  document.getElementById('resetwrap').hidden=true;
+  if(LIVE.projects) S.projects=LIVE.projects;
+  S.queue=scr.filter(d=>d.status==='waiting').map(d=>({id:d.id,title:d.title||'Untitled',note:[d.note,d.from].filter(Boolean).join(' · ')}));
+  S.decided=scr.filter(d=>d.status==='greenlit'||d.status==='sentback').sort((a,b)=>String(b.decidedAt||'').localeCompare(String(a.decidedAt||''))).slice(0,8).map(d=>({title:d.title||'Untitled',ok:d.status==='greenlit'}));
+  R.forEach(r=>{
+    const base=SAMPLE_ROOMS.find(x=>x.id===r.id), A=LIVE.agents[r.id];
+    if(r.id==='screening'){r.light=S.queue.length?'waiting':'done';return}
+    const C=crewOf(r.id);
+    if(C.length){r.light=topLight(C);const lead=C.find(a=>a.light==='waiting')||C.find(a=>a.light==='working')||C[0];r.now=typeof lead.now==='string'?lead.now:'';r.agent=C.length>1?C.length+' agents':(lead.name||r.agent)}
+    else if(A){r.light=LIGHTS.includes(A.light)?A.light:'working';r.now=typeof A.now==='string'?A.now:''}
+    else if(r.id==='atrium'){r.light=base.light;r.now=base.now}
+    else {r.light='idle';r.now=''}
+  });
+  if(LIVE.briefing&&!LIVE.agents.ceo){const c=R.find(r=>r.id==='ceo');c.light='done';c.now='Today’s briefing is on the glass, built from your calendar and inbox.'}
+  syncLights();syncTags();renderScreens();renderCrew();fit();
+  if(cur>=0&&!busy){detail.innerHTML=detailHTML(R[cur]);bindDetail();if(R[cur].id==='atrium')flapIn()}
+}
+(async()=>{
+  try{
+    for(let i=0;i<20&&!(window.claude&&window.claude.use);i++) await new Promise(r=>setTimeout(r,250));
+    if(!(window.claude&&window.claude.use)) return;
+    DB=await window.claude.use('db'); if(!DB) return;
+    const err=()=>{};
+    DB.doc('hq/briefing').onSnapshot(s=>{LIVE.briefing=s.exists?s.data():null;applyLive()},err);
+    DB.doc('board/projects').onSnapshot(s=>{const d=s.exists&&s.data();LIVE.projects=d&&Array.isArray(d.items)&&d.items.length?d.items.slice(0,8).map(p=>({id:String(p.id||''),name:String(p.name||''),div:String(p.div||'SERVICES').toUpperCase(),status:String(p.status||'IN REVIEW').toUpperCase(),due:String(p.due||'')})):null;applyLive()},err);
+    DB.collection('agents').onSnapshot(q=>{const m={};q.docs.forEach(d=>{if(d.exists)m[d.id]=d.data()});LIVE.agents=m;applyLive()},err);
+    DB.collection('screening').orderBy('createdAt').limit(200).onSnapshot(q=>{LIVE.screening=q.docs.filter(d=>d.exists).map(d=>({id:d.id,...d.data()}));applyLive()},err);
+  }catch(e){}
+})();
+
+/* static feed: data.json is rewritten on each deploy from the real calendar, inbox and channel numbers */
+/* Reads the live feed (/api/data, updated by the daily run) and the shipped data.json, and uses whichever is newer. */
+async function getFeed(){let best=null;for(const u of ['/api/data','data.json']){try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)continue;const j=await r.json();if(j&&j.briefing&&(!best||String(j.generatedAt||'')>String(best.generatedAt||'')))best=j}catch(e){}}if(!best)throw 0;return best}
+async function loadFeed(){
+  try{
+    const d=await getFeed();
+    LIVE.briefing=d.briefing||null;
+    LIVE.agents=d.agents||{};
+    LIVE.roster=(d.roster&&typeof d.roster==='object')?d.roster:{};
+    LIVE.projects=Array.isArray(d.projects)&&d.projects.length?d.projects.slice(0,8).map(p=>({id:String(p.id||''),name:String(p.name||''),div:String(p.div||'SERVICES').toUpperCase(),status:String(p.status||'IN REVIEW').toUpperCase(),due:String(p.due||'')})):null;
+    LIVE.screening=[];
+  }catch(e){}
+  applyNow();
+}
+loadFeed(); setInterval(loadFeed,300000);
+
+renderScreens();
+syncLights();
+new ResizeObserver(fit).observe(stage);
+fit();
+go(location.hash.slice(1)||'atrium',false);
+tick(); setInterval(tick,15000);
+})();
+</script>
+
+</body></html>
