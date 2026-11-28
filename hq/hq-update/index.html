@@ -188,6 +188,19 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .face .light{position:absolute;right:-1px;bottom:2px;width:clamp(10px,1vw,14px);height:clamp(10px,1vw,14px);border:2px solid #14110e}
 .face .ask{position:absolute;left:-4px;top:-4px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--amber,#f3b55b);color:#14110e;font:600 10px/18px var(--body);text-shadow:none}
 .mate small{font:500 clamp(8px,.8vw,11px)/1.15 var(--body);letter-spacing:.08em;text-transform:uppercase;color:#fbf4e6dd;max-width:100%;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.mapw{position:absolute;inset:0;pointer-events:auto}
+.mapw svg{position:absolute;inset:0;width:100%;height:100%}
+.pod{position:absolute;transform:translate(-50%,-50%);min-width:220px;max-width:260px;padding:12px 14px;border-radius:26px 26px 26px 8px;background:#ecdfc612;border:1px solid #ecdfc633;backdrop-filter:blur(3px);color:#fbf4e6;text-align:left;cursor:pointer;font:inherit;transition:transform .25s,border-color .25s,background .25s}
+.pod:hover,.pod:focus{transform:translate(-50%,-50%) scale(1.06);border-color:var(--amber,#f3b55b);background:#ecdfc620;outline:none}
+.pod.big{min-width:280px}
+.pod h5{margin:0 0 6px;font:400 18px/1.1 var(--display);letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.pod .fx{display:flex;gap:6px;margin:6px 0}
+.pod .fx .face{width:34px}.pod .fx .face .ini{font-size:13px}.pod .fx .face .light{width:9px;height:9px}.pod .fx .face .ask{display:none}
+.pod p{margin:4px 0 0;font-size:12px;line-height:1.35;color:#fbf4e6c0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pod .need{position:absolute;right:-8px;top:-8px;min-width:24px;height:24px;padding:0 7px;border-radius:999px;background:var(--amber,#f3b55b);color:#14110e;font:600 12px/24px var(--body);text-align:center}
+.pod .talk{display:inline-flex;gap:3px;margin-left:auto}.pod .talk i{width:5px;height:5px;border-radius:50%;background:#ecdfc6aa;animation:blip 1.2s infinite}.pod .talk i:nth-child(2){animation-delay:.2s}.pod .talk i:nth-child(3){animation-delay:.4s}
+@keyframes blip{0%,100%{opacity:.2}50%{opacity:1}}
+.maptitle{position:absolute;right:3%;top:4%;font:400 13px var(--body);letter-spacing:.3em;text-transform:uppercase;color:#ecdfc699}
 .cc{position:absolute;left:50%;bottom:clamp(70px,14%,140px);transform:translateX(-50%);max-width:min(80%,900px);padding:10px 18px;border-radius:12px;background:#0d0b09d9;border:1px solid #ecdfc626;font-size:clamp(14px,1.5vw,20px);line-height:1.4;text-align:center;z-index:6;opacity:0;transition:opacity .3s;pointer-events:none}
 .cc.on{opacity:1}.cc b{color:var(--amber,#f3b55b);font-weight:600;margin-right:6px}.cc small{display:block;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#ecdfc680;margin-bottom:4px}
 .hear{margin-top:6px;background:none;border:1px solid #ecdfc640;color:inherit;border-radius:999px;padding:3px 12px;font:500 11px var(--body);letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
@@ -196,8 +209,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .pitch{max-height:46vh;overflow:auto;white-space:pre-wrap;font:400 15px/1.6 'IBM Plex Mono',monospace;background:#ffffff08;border:1px solid #ecdfc61f;border-radius:10px;padding:14px 16px;margin-top:12px}
 .notes{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.notes[hidden]{display:none}
 .scr-text{padding:18px 26px;font:400 17px/1.55 'IBM Plex Mono',monospace;color:#f4ead6;white-space:pre-wrap;overflow:hidden;height:100%;mask-image:linear-gradient(#000 80%,transparent)}
+.plate-css.map{background:radial-gradient(ellipse at 50% 45%,#22301f 0%,#141c12 55%,#0b0f09 100%)}
 .plate-css{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 35%,#5a4330 0%,#2a2018 38%,#100c09 78%),#100c09}
-.plate-css::after{content:"Writers' Room";position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);font-family:var(--display);font-size:clamp(28px,6vw,90px);letter-spacing:.2em;text-transform:uppercase;color:#ecdfc614;white-space:nowrap}
+.plate-css::after{content:attr(data-t);position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);font-family:var(--display);font-size:clamp(28px,6vw,90px);letter-spacing:.2em;text-transform:uppercase;color:#ecdfc614;white-space:nowrap}
 .crewlist{margin-top:18px;display:grid;gap:10px}
 .cm{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start;padding:10px 12px;border:1px solid #ecdfc61f;border-radius:12px;background:#ffffff06}
 .cm .face{width:52px}
@@ -304,6 +318,22 @@ function overheardPanel(room){const L=OVH().map((o,i)=>Object.assign({i},o)).fil
   return `<div class="eyebrow" style="margin-top:22px">Overheard in this room</div><div class="ovh">${rowsHTML(L.map(o=>[o.title||((o.lines||[])[0]||{}).text||'Conversation',(o.lines||[]).map(l=>l.who).filter((v,i,a)=>a.indexOf(v)===i).join(' · '),`<button class="hear" type="button" data-ovh="${o.i}">▶ Listen</button>`]))}</div>`}
 /* ambient: every few minutes, if the room you're standing in has a conversation, you hear it */
 setInterval(()=>{if(!unlocked||talking||cur<0)return;const L=OVH().filter(o=>o.room===R[cur].id);if(!L.length)return;const o=L[Math.floor(Math.random()*L.length)];playLines(o.lines,roomName(o.room))},240000);
+const MAP={marketing:[300,235],producer:[660,150],business:[1010,140],ceo:[1320,270],atrium:[800,450],newsroom:[1315,640],'edit-bay':[980,765],writers:[610,765],screening:[270,630]};
+function mapHTML(){
+  const roomsIn=Object.keys(MAP);
+  const order=['atrium','marketing','producer','business','ceo','newsroom','edit-bay','writers','screening'];
+  const path=order.map(id=>MAP[id]).map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' ');
+  const svg=`<svg viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true">
+   <path d="M-20 80 C 300 200, 420 420, 760 470 S 1250 560, 1640 860" stroke="#3d6b78" stroke-opacity=".55" stroke-width="46" fill="none" stroke-linecap="round"/>
+   <path d="M-20 80 C 300 200, 420 420, 760 470 S 1250 560, 1640 860" stroke="#8fc3cf" stroke-opacity=".18" stroke-width="10" fill="none"/>
+   ${Array.from({length:70},(_,i)=>{const x=(i*233)%1600,y=(i*137)%900,r=18+(i*7)%30;return `<circle cx="${x}" cy="${y}" r="${r}" fill="#2d4a26" fill-opacity=".35"/>`}).join('')}
+   <path d="${path}" stroke="#ecdfc6" stroke-opacity=".22" stroke-width="3" stroke-dasharray="2 10" fill="none" stroke-linecap="round"/></svg>`;
+  const pods=roomsIn.map(id=>{const r=R.find(x=>x.id===id);if(!r)return '';const C=LIVE.on?crewOf(id):[];const [x,y]=MAP[id];
+    const asks=id==='screening'?S.queue.length:C.reduce((n,a)=>n+((a.waitingOnMichael||[]).length),0);
+    const talk=OVH().some(o=>o.room===id);
+    const now=id==='screening'?(S.queue[0]?'Waiting: '+S.queue[0].title:'Now playing: '+NS().title):(r.now||'');
+    return `<button class="pod${id==='atrium'?' big':''}" type="button" data-go="${id}" style="left:${x/16}%;top:${y/9}%">${asks?`<span class="need">${asks}</span>`:''}<h5><span class="light ${r.light}"></span>${esc(r.name)}${talk?'<span class="talk"><i></i><i></i><i></i></span>':''}</h5>${C.length?`<div class="fx">${C.slice(0,5).map(a=>faceHTML(a)).join('')}</div>`:''}${now?`<p>${esc(now)}</p>`:''}</button>`}).join('');
+  return `<div class="mapw">${svg}<div class="maptitle">Point Reyes Productions · Portland Parish · from above</div>${pods}</div>`}
 function stationsHTML(){const S2=(Array.isArray(LIVE.stations)?LIVE.stations:[]).slice(0,3);while(S2.length<3)S2.push({t:'Idle',s:'',pct:0});
   return `<div class="wallq">${S2.map((s,i)=>`<div class="wq"><small>STATION ${i+1}${s.who?' · '+esc(String(s.who).toUpperCase()):''}</small><b${s.t==='Idle'?' style="color:#ecdfc666"':''}>${esc(s.t)}</b><i><u style="width:${Math.max(0,Math.min(100,+s.pct||0))}%"></u></i></div>`).join('')}</div>`}
 function lookoutHTML(){const A=LIVE.agents.business||{},rows=(A.rows||[]).slice(0,5);const pos=[[40,95,24],[225,20,12],[415,-5,0],[605,20,-12],[790,95,-24]];
@@ -316,6 +346,7 @@ let DB=null;
 const TONE={cash:'st-cut',equity:'st-waiting',drift:'st-delayed',ok:'st-delivered',wait:'st-waiting',review:'st-review',hot:'st-boarding'};
 function isLive(id){
   if(!LIVE.on) return false;
+  if(id==='map') return true;
   if(id!=='screening'&&id!=='atrium'&&crewOf(id).length) return true;
   if(id==='ceo') return !!(LIVE.briefing||LIVE.agents.ceo);
   if(id==='atrium') return !!LIVE.projects;
@@ -344,6 +375,7 @@ const flap = (txt,len) => { const t=String(txt).toUpperCase().padEnd(len||txt.le
 /* ---------- rooms ----------
    quad = screen corners in the source image, as fractions of width/height: TL, TR, BR, BL */
 const R = [
+ {id:'map', name:"Bird's-eye", div:'The whole campus', agent:'Everyone', img:'', light:'working', now:'', screens:[{q:[[0,0],[1600,0],[1600,900],[0,900]],src:1600,w:1600,h:900,html:()=>mapHTML()}]},
  {id:'atrium', name:'The Atrium', div:'Common area', agent:'Chief of staff', img:'img/atrium.jpg',
   light:'working', now:'Keeping the departures board current across all three divisions.',
   screens:[
@@ -440,14 +472,14 @@ function solve(A,b){const n=b.length;for(let i=0;i<n;i++){let m=i;for(let r=i+1;
 function matrixFor(w,h,q){const src=[[0,0],[w,0],[w,h],[0,h]];const A=[],b=[];for(let i=0;i<4;i++){const[x,y]=src[i],[u,v]=q[i];A.push([x,y,1,0,0,0,-u*x,-u*y]);b.push(u);A.push([0,0,0,x,y,1,-v*x,-v*y]);b.push(v);}const[a,bb,c,d,e,f,g,hh]=solve(A,b);return `matrix3d(${a},${d},0,${g},${bb},${e},0,${hh},0,0,1,0,${c},${f},0,1)`}
 
 /* walk order: morning in the atrium to night in the amphitheater */
-const WALK=['atrium','marketing','producer','business','ceo','newsroom','edit-bay','writers','screening'];
+const WALK=['map','atrium','marketing','producer','business','ceo','newsroom','edit-bay','writers','screening'];
 R.sort((a,b)=>WALK.indexOf(a.id)-WALK.indexOf(b.id));
 
 /* ---------- build stage ---------- */
 const stage=document.getElementById('stage'), rail=document.getElementById('rail'), detail=document.getElementById('detail');
 R.forEach((r,ri)=>{
   const el=document.createElement('div');el.className='room';el.id='room-'+r.id;
-  el.innerHTML=(!r.img&&!r.vid)?`<div class="plate-css"></div><div class="tint"></div>`:r.vid?`<video class="plate" ${r.loop?'loop':''} src="${r.vid}" poster="${r.poster||r.img}" muted playsinline preload="auto" aria-label="${esc(r.name)}"></video><div class="tint"></div>`:`<img src="${r.img}" alt="${esc(r.name)}" ${ri? 'loading="lazy"':''}><div class="tint"></div>`;
+  el.innerHTML=(!r.img&&!r.vid)?`<div class="plate-css${r.id==='map'?' map':''}" data-t="${r.id==='map'?'':esc(r.name)}"></div>${r.id==='map'?'':'<div class="tint"></div>'}`:r.vid?`<video class="plate" ${r.loop?'loop':''} src="${r.vid}" poster="${r.poster||r.img}" muted playsinline preload="auto" aria-label="${esc(r.name)}"></video><div class="tint"></div>`:`<img src="${r.img}" alt="${esc(r.name)}" ${ri? 'loading="lazy"':''}><div class="tint"></div>`;
   r.screens.forEach((s,si)=>{const d=document.createElement('div');d.className='screen';d.style.width=s.w+'px';d.style.height=s.h+'px';d.dataset.r=ri;d.dataset.s=si;el.appendChild(d)});
   const cw=document.createElement('div');cw.className='crew';cw.dataset.crew=r.id;el.appendChild(cw);
   const lab=document.createElement('div');lab.className='label';lab.innerHTML=`<span class="light ${r.light}" data-light="${r.id}"></span><b>${esc(r.name)}</b><em data-tag="${r.id}"></em>`;el.appendChild(lab);
@@ -478,6 +510,11 @@ function detailHTML(r){
       +`<div class="stamp">Updated ${esc(when(C.map(a=>a.updatedAt||'').sort().pop()))}</div>`;
   } else if(A&&r.id!=='screening'){
     body=liveRows(A.rows)+(A.updatedAt?`<div class="stamp">Updated ${esc(when(A.updatedAt))}</div>`:'');
+  } else if(r.id==='map'){
+    const all=Object.keys(LIVE.agents||{}).map(id=>Object.assign({id},LIVE.agents[id])).filter(a=>roomOf(a.id)||a.id==='ceo');
+    const need=all.flatMap(a=>(a.waitingOnMichael||[]).map(w=>[w,a.person||a.name||a.id,'YOU']));
+    body=`<div class="eyebrow">Everything waiting on you</div>`+(need.length?rowsHTML(need.slice(0,10)):`<p style="color:var(--plaster-dim)">Nothing. Everyone's moving.</p>`)
+      +`<div class="eyebrow" style="margin-top:22px">On the floor</div>`+rowsHTML(all.filter(a=>a.light==='working').map(a=>[a.person||a.name,a.now||'',roomName(roomOf(a.id)||'ceo')]));
   } else if(LIVE.on&&r.id!=='atrium'&&r.id!=='screening'){
     body=`<div class="eyebrow">Off duty</div><p style="color:var(--plaster-dim);max-width:52ch">${esc(OFF[r.id]||'Not on duty yet.')} Nothing on this room's screens is real until then.</p>`;
   } else switch(r.id){
@@ -618,6 +655,7 @@ function show(i,push,arrived){
   if(R[i].id==='atrium') flapIn();
   if(push!==false && location.hash.slice(1)!==R[i].id){ try{history.replaceState(null,'','#'+R[i].id)}catch(e){location.hash=R[i].id} }
 }
+stage.addEventListener('click',e=>{const p=e.target.closest('[data-go]');if(p){e.preventDefault();go(p.dataset.go)}});
 const step=d=>go(R[(cur+d+R.length)%R.length].id);
 document.getElementById('prev').onclick=()=>step(-1);
 document.getElementById('next').onclick=()=>step(1);
@@ -737,9 +775,14 @@ function applyNow(){
     if(C.length){r.light=topLight(C);const lead=C.find(a=>a.light==='waiting')||C.find(a=>a.light==='working')||C[0];r.now=typeof lead.now==='string'?lead.now:'';r.agent=C.length>1?C.length+' agents':(lead.name||r.agent)}
     else if(A){r.light=LIGHTS.includes(A.light)?A.light:'working';r.now=typeof A.now==='string'?A.now:''}
     else if(r.id==='atrium'){r.light=base.light;r.now=base.now}
+    else if(r.id==='map'){const all=Object.values(LIVE.agents||{});r.light=topLight(all);r.now=all.filter(a=>a.light==='working').length+' working · '+all.reduce((n,a)=>n+((a&&a.waitingOnMichael)||[]).length,0)+' things waiting on you'}
     else {r.light='idle';r.now=''}
   });
   if(LIVE.briefing&&!LIVE.agents.ceo){const c=R.find(r=>r.id==='ceo');c.light='done';c.now='Today’s briefing is on the glass, built from your calendar and inbox.'}
+  const PL=LIVE.plates||{};R.forEach(r=>{const p=PL[r.id];if(!p)return;const src=safeUrl(p.vid)||safeUrl(p.img);if(!src||r._plate===src)return;r._plate=src;
+    const el=document.getElementById('room-'+r.id);if(!el)return;const old=el.querySelector(':scope > img, :scope > video.plate, :scope > .plate-css');if(!old)return;
+    const nu=safeUrl(p.vid)?Object.assign(document.createElement('video'),{className:'plate',src:safeUrl(p.vid),poster:safeUrl(p.img)||'',muted:true,loop:true,playsInline:true,autoplay:el.classList.contains('on')}):Object.assign(document.createElement('img'),{src:safeUrl(p.img),alt:r.name});
+    if(nu.tagName==='VIDEO'){nu.setAttribute('muted','');nu.setAttribute('playsinline','');nu.setAttribute('loop','')}old.replaceWith(nu)});
   syncLights();syncTags();renderScreens();renderCrew();fit();
   if(cur>=0&&!busy){detail.innerHTML=detailHTML(R[cur]);bindDetail();if(R[cur].id==='atrium')flapIn()}
 }
@@ -766,6 +809,7 @@ async function loadFeed(){
     LIVE.agents=d.agents||{};
     LIVE.roster=(d.roster&&typeof d.roster==='object')?d.roster:{};
     LIVE.overheard=Array.isArray(d.overheard)?d.overheard.slice(0,20):[];
+    LIVE.plates=d.plates&&typeof d.plates==='object'?d.plates:{};
     LIVE.stations=Array.isArray(d.stations)?d.stations:null;
     LIVE.nowShowing=d.nowShowing&&typeof d.nowShowing==='object'?d.nowShowing:null;
     LIVE.projects=Array.isArray(d.projects)&&d.projects.length?d.projects.slice(0,8).map(p=>({id:String(p.id||''),name:String(p.name||''),div:String(p.div||'SERVICES').toUpperCase(),status:String(p.status||'IN REVIEW').toUpperCase(),due:String(p.due||'')})):null;
@@ -779,7 +823,7 @@ renderScreens();
 syncLights();
 new ResizeObserver(fit).observe(stage);
 fit();
-go(location.hash.slice(1)||'atrium',false);
+go(location.hash.slice(1)||'map',false);
 tick(); setInterval(tick,15000);
 })();
 </script>
