@@ -188,6 +188,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .face .light{position:absolute;right:-1px;bottom:2px;width:clamp(10px,1vw,14px);height:clamp(10px,1vw,14px);border:2px solid #14110e}
 .face .ask{position:absolute;left:-4px;top:-4px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--amber,#f3b55b);color:#14110e;font:600 10px/18px var(--body);text-shadow:none}
 .mate small{font:500 clamp(8px,.8vw,11px)/1.15 var(--body);letter-spacing:.08em;text-transform:uppercase;color:#fbf4e6dd;max-width:100%;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.cc{position:absolute;left:50%;bottom:clamp(70px,14%,140px);transform:translateX(-50%);max-width:min(80%,900px);padding:10px 18px;border-radius:12px;background:#0d0b09d9;border:1px solid #ecdfc626;font-size:clamp(14px,1.5vw,20px);line-height:1.4;text-align:center;z-index:6;opacity:0;transition:opacity .3s;pointer-events:none}
+.cc.on{opacity:1}.cc b{color:var(--amber,#f3b55b);font-weight:600;margin-right:6px}.cc small{display:block;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#ecdfc680;margin-bottom:4px}
+.hear{margin-top:6px;background:none;border:1px solid #ecdfc640;color:inherit;border-radius:999px;padding:3px 12px;font:500 11px var(--body);letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+.hear:hover,.hear:focus{border-color:var(--amber,#f3b55b);color:var(--amber,#f3b55b)}
+.ovh{margin-top:18px;display:grid;gap:8px}.ovh .row{cursor:pointer}
 .plate-css{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 35%,#5a4330 0%,#2a2018 38%,#100c09 78%),#100c09}
 .plate-css::after{content:"Writers' Room";position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);font-family:var(--display);font-size:clamp(28px,6vw,90px);letter-spacing:.2em;text-transform:uppercase;color:#ecdfc614;white-space:nowrap}
 .crewlist{margin-top:18px;display:grid;gap:10px}
@@ -218,6 +223,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   <div class="stage-box">
     <div class="stage" id="stage" aria-label="Headquarters view">
       <a class="briefback" id="briefback" href="/tv/">&#8592; Briefing</a>
+      <div class="cc" id="cc" aria-live="polite"></div>
       <button class="nav-arrow prev" id="prev" aria-label="Previous room">&#8592;</button>
       <button class="nav-arrow next" id="next" aria-label="Next room">&#8594;</button>
     </div>
@@ -272,11 +278,37 @@ const initials=n=>String(n||'?').replace(/^the\s+/i,'').split(/\s+/).filter(Bool
 const safeUrl=u=>/^https:\/\//i.test(String(u||''))?String(u):'';
 function faceHTML(a){const u=safeUrl(a.avatar),asks=(a.waitingOnMichael||[]).length;
   const media=u?(/\.(mp4|webm)(\?|$)/i.test(u)?`<video src="${esc(u)}" muted loop autoplay playsinline></video>`:`<img src="${esc(u)}" alt="" loading="lazy">`):'';
-  return `<div class="face">${media||`<span class="ini">${esc(initials(a.name||a.id))}</span>`}<span class="light ${LIGHTS.includes(a.light)?a.light:'idle'}"></span>${asks?`<span class="ask">${asks}</span>`:''}</div>`}
-function renderCrew(){document.querySelectorAll('[data-crew]').forEach(el=>{const C=LIVE.on?crewOf(el.dataset.crew):[];el.innerHTML=C.slice(0,6).map(a=>`<div class="mate">${faceHTML(a)}<small>${esc(a.name||a.id)}</small></div>`).join('')})}
+  return `<div class="face">${media||`<span class="ini">${esc(a.person?String(a.person)[0].toUpperCase():initials(a.name||a.id))}</span>`}<span class="light ${LIGHTS.includes(a.light)?a.light:'idle'}"></span>${asks?`<span class="ask">${asks}</span>`:''}</div>`}
+function renderCrew(){document.querySelectorAll('[data-crew]').forEach(el=>{const C=LIVE.on?crewOf(el.dataset.crew):[];el.innerHTML=C.slice(0,6).map(a=>`<div class="mate">${faceHTML(a)}<small>${esc(a.person||a.name||a.id)}</small></div>`).join('')})}
 const LBL={working:'Working',waiting:'Waiting on you',idle:'Standing by',done:'Done'};
+/* ---------- voices: agents speak with the browser's own voices (free, no account); a line or conversation with an `audio` URL plays that file instead ---------- */
+const hashS=s=>{let x=0;for(const c of String(s))x=(x*31+c.charCodeAt(0))>>>0;return x};
+let unlocked=false;['pointerdown','keydown'].forEach(ev=>window.addEventListener(ev,()=>{unlocked=true},{once:true}));
+function voiceFor(who){const vs=(window.speechSynthesis?speechSynthesis.getVoices():[]).filter(v=>/^en/i.test(v.lang));const a=Object.values(LIVE.agents||{}).find(x=>x&&(x.person===who||x.name===who))||{};const g=a.voice||'';
+  let pool=vs; if(g==='female')pool=vs.filter(v=>/female|samantha|victoria|karen|moira|tessa|zira|aria|jenny|google us english/i.test(v.name)); if(g==='male')pool=vs.filter(v=>/male|daniel|alex|fred|david|guy|mark|google uk english male/i.test(v.name)&&!/female/i.test(v.name)); if(!pool.length)pool=vs;
+  return pool.length?pool[hashS(who)%pool.length]:null}
+function caption(room,who,text){const c=document.getElementById('cc');if(!c)return;if(!text){c.classList.remove('on');return}c.innerHTML=(room?`<small>Overheard · ${esc(room)}</small>`:'')+`<b>${esc(who)}</b>${esc(text)}`;c.classList.add('on')}
+let talking=false;
+function playLines(lines,room){if(!lines||!lines.length)return;stopTalk();talking=true;
+  const cv=lines.audio;if(cv){const au=new Audio(cv);au.onended=()=>{talking=false;caption()};caption(room,lines[0].who,lines[0].text);au.play().catch(()=>{talking=false});return}
+  if(!window.speechSynthesis){talking=false;return}
+  lines.forEach((l,i)=>{const u=new SpeechSynthesisUtterance(String(l.text||''));const v=voiceFor(l.who);if(v)u.voice=v;const k=hashS(l.who);u.pitch=.82+(k%9)/25;u.rate=.98+(k%5)/50;
+    u.onstart=()=>caption(room,l.who,l.text);if(i===lines.length-1)u.onend=()=>{talking=false;setTimeout(()=>caption(),1200)};speechSynthesis.speak(u)})}
+function stopTalk(){try{speechSynthesis.cancel()}catch(e){}talking=false;caption()}
+const OVH=()=>Array.isArray(LIVE.overheard)?LIVE.overheard:[];
+function roomName(id){const r=R.find(x=>x.id===id);return r?r.name:id}
+function overheardPanel(room){const L=OVH().map((o,i)=>Object.assign({i},o)).filter(o=>o.room===room);if(!L.length)return '';
+  return `<div class="eyebrow" style="margin-top:22px">Overheard in this room</div><div class="ovh">${rowsHTML(L.map(o=>[o.title||((o.lines||[])[0]||{}).text||'Conversation',(o.lines||[]).map(l=>l.who).filter((v,i,a)=>a.indexOf(v)===i).join(' · '),`<button class="hear" type="button" data-ovh="${o.i}">▶ Listen</button>`]))}</div>`}
+/* ambient: every few minutes, if the room you're standing in has a conversation, you hear it */
+setInterval(()=>{if(!unlocked||talking||cur<0)return;const L=OVH().filter(o=>o.room===R[cur].id);if(!L.length)return;const o=L[Math.floor(Math.random()*L.length)];playLines(o.lines,roomName(o.room))},240000);
+function stationsHTML(){const S2=(Array.isArray(LIVE.stations)?LIVE.stations:[]).slice(0,3);while(S2.length<3)S2.push({t:'Idle',s:'',pct:0});
+  return `<div class="wallq">${S2.map((s,i)=>`<div class="wq"><small>STATION ${i+1}${s.who?' · '+esc(String(s.who).toUpperCase()):''}</small><b${s.t==='Idle'?' style="color:#ecdfc666"':''}>${esc(s.t)}</b><i><u style="width:${Math.max(0,Math.min(100,+s.pct||0))}%"></u></i></div>`).join('')}</div>`}
+function lookoutHTML(){const A=LIVE.agents.business||{},rows=(A.rows||[]).slice(0,5);const pos=[[40,95,24],[225,20,12],[415,-5,0],[605,20,-12],[790,95,-24]];
+  if(!rows.length)return `<div class="holo">${pos.map(([l,t,ry],i)=>`<div class="hp" style="left:${l}px;top:${t}px;--ry:${ry}deg;opacity:.55"><small>${['Radar','Pipeline','Today','Proof','Next'][i]}</small><b>—</b><span>${i===2?esc(A.now||'Standing by'):'No leads yet'}</span></div>`).join('')}</div>`;
+  return `<div class="holo">${rows.map((x,i)=>{const [l,t,ry]=pos[i];return `<div class="hp" style="left:${l}px;top:${t}px;--ry:${ry}deg;animation-delay:-${i*1.3}s"><small>${esc(x.r||'LEAD')}</small><b style="font-size:20px">${esc(x.t||'')}</b><span>${esc(x.s||'')}</span></div>`}).join('')}</div>`}
+const NS=()=>LIVE.nowShowing&&safeUrl(LIVE.nowShowing.src)?LIVE.nowShowing:{title:'Miles of Love',note:'A film dedicated to my son',src:'vid/miles-of-love.mp4',poster:'img/miles-of-love-poster.jpg'};
 function crewPanel(room){const C=LIVE.on?crewOf(room):[];if(!C.length)return '';
-  return `<div class="crewlist">${C.map(a=>`<div class="cm">${faceHTML(a)}<div><b>${esc(a.name||a.id)} · ${esc(LBL[a.light]||'Standing by')}</b>${a.does?`<div class="does">${esc(a.does)}</div>`:''}${a.now?`<div class="nowl">${esc(a.now)}</div>`:''}${(a.waitingOnMichael||[]).length?`<ul>${a.waitingOnMichael.slice(0,4).map(w=>`<li>${esc(w)}</li>`).join('')}</ul>`:''}${a.look&&!safeUrl(a.avatar)?`<div class="look">Casting: ${esc(a.look)}</div>`:''}</div></div>`).join('')}</div>`}
+  return `<div class="crewlist">${C.map(a=>`<div class="cm">${faceHTML(a)}<div><b>${esc(a.name||a.id)} · ${esc(LBL[a.light]||'Standing by')}</b>${a.does?`<div class="does">${esc(a.does)}</div>`:''}${a.now?`<div class="nowl">${esc(a.now)}</div>`:''}${(a.waitingOnMichael||[]).length?`<ul>${a.waitingOnMichael.slice(0,4).map(w=>`<li>${esc(w)}</li>`).join('')}</ul>`:''}${a.look&&!safeUrl(a.avatar)?`<div class="look">Casting: ${esc(a.look)}</div>`:''}${(a.say||a.now)?`<button class="hear" type="button" data-say="${esc(a.id)}">▶ Hear from ${esc(String(a.name||a.id).split(' ')[0])}</button>`:''}</div></div>`).join('')}</div>`}
 let DB=null;
 const TONE={cash:'st-cut',equity:'st-waiting',drift:'st-delayed',ok:'st-delivered',wait:'st-waiting',review:'st-review',hot:'st-boarding'};
 function isLive(id){
@@ -319,7 +351,7 @@ const R = [
   screens:[{q:[[1000,290],[1570,275],[1570,690],[1000,700]],src:1792, w:600,h:440, html:()=>ceoGlass()}]},
  {id:'edit-bay', name:'Edit Bay', div:'Studio & Services', agent:'Three editors · DaVinci Resolve', img:'img/edit.jpg',
   light:'working', now:'Three editors, three stations. Station three has no live cut right now, so it’s looping the archive instead of sitting dark.',
-  screens:[{q:[[372,343],[908,343],[908,413],[372,413]],src:1280, w:1000,h:140, html:()=>LIVE.on&&!isLive('edit-bay')?offScreen('edit-bay'):`<div class="wallq"><div class="wq"><small>STATION 1</small><b>BMAC Recap · Cut 3</b><i><u style="width:64%"></u></i></div><div class="wq"><small>STATION 2</small><b>HT Short · Assembly</b><i><u style="width:30%"></u></i></div><div class="wq"><small>STATION 3</small><b>No live cut · archive loop</b><i><u style="width:100%;background:var(--plaster-faint)"></u></i></div></div>`}]},
+  screens:[{q:[[372,343],[908,343],[908,413],[372,413]],src:1280, w:1000,h:140, html:()=>LIVE.on&&Array.isArray(LIVE.stations)&&LIVE.stations.length?stationsHTML():LIVE.on?offScreen('edit-bay'):`<div class="wallq"><div class="wq"><small>STATION 1</small><b>BMAC Recap · Cut 3</b><i><u style="width:64%"></u></i></div><div class="wq"><small>STATION 2</small><b>HT Short · Assembly</b><i><u style="width:30%"></u></i></div><div class="wq"><small>STATION 3</small><b>No live cut · archive loop</b><i><u style="width:100%;background:var(--plaster-faint)"></u></i></div></div>`}]},
  {id:'producer', name:"Producer's Desk", div:'Services', agent:'Producer agent', img:'img/producer.jpg',
   light:'working', now:'Tracking the week’s shoots and hunting new content angles for Hollywood Today and Studio.',
   screens:[{q:[[120,258],[588,290],[588,394],[120,422]],src:1280, w:1000,h:380, html:()=>!isLive('producer')?offScreen('producer'):`<div class="sheet"><h4>THIS WEEK</h4>${(LIVE.agents.producer.rows||[]).slice(0,8).map(x=>`<div class="day"><small>${esc(x.r||'')}</small>${esc(x.t||'')}</div>`).join('')}</div>`}]},
@@ -333,7 +365,7 @@ const R = [
   light:'waiting', now:'Six on the floor working leads — calls, research, two heads-down over one laptop on outreach. Latest draft is waiting in the screening room.',
   screens:[
    {q:[[676,412],[844,412],[844,460],[676,460]],src:1280, w:260,h:72, html:()=>'<div class="waterfx"><i></i><i class="b"></i></div>'},
-   {q:[[240,250],[1040,250],[1040,590],[240,590]],src:1280, w:1000,h:425, html:()=>LIVE.on&&!isLive('business')?offScreen('business'):`<div class="holo">
+   {q:[[240,250],[1040,250],[1040,590],[240,590]],src:1280, w:1000,h:425, html:()=>LIVE.on&&isLive('business')?lookoutHTML():LIVE.on?offScreen('business'):`<div class="holo">
    <i class="beam" style="left:125px;height:170px"></i><i class="beam" style="left:310px;height:250px"></i><i class="beam" style="left:500px;height:285px"></i><i class="beam" style="left:690px;height:250px"></i><i class="beam" style="left:875px;height:170px"></i>
    <div class="hp" style="left:40px;top:95px;--ry:24deg"><small>Radar</small><b>14 leads</b><span>4 warm · real estate leads</span><svg viewBox="0 0 140 36" width="100%" height="30"><circle cx="18" cy="20" r="4" fill="#ffd08a"/><circle cx="44" cy="10" r="3" fill="#ffd08a99"/><circle cx="66" cy="24" r="5" fill="#ffd08a"/><circle cx="92" cy="14" r="3" fill="#ffd08a99"/><circle cx="116" cy="22" r="4" fill="#ffd08a"/><circle cx="132" cy="8" r="2" fill="#ffd08a66"/></svg></div>
    <div class="hp" style="left:225px;top:20px;--ry:12deg;animation-delay:-1.5s"><small>Pipeline</small><b>$18.4K</b><span>likely to land this month</span></div>
@@ -353,7 +385,7 @@ const R = [
  {id:'writers', name:"Writers' Room", div:'Studio', agent:'Story team', img:'', light:'idle', now:'', screens:[]},
  {id:'screening', name:'Screening Amphitheater', div:'The greenlight', agent:'You', img:'img/screening.jpg',
   light:'waiting', now:'',
-  screens:[{q:[[380,262],[940,262],[940,478],[380,478]],src:1280, w:1000,h:372, html:()=>{const n=S.queue[0]; const info=n?`<small>NOW SCREENING</small><b>${esc(n.title.toUpperCase())}</b><span>${esc(n.note.toUpperCase())}</span>`:`<small>NOW PLAYING</small><b>MILES OF LOVE</b><span>A FILM DEDICATED TO MY SON</span>`; return `<div class="scr"><video class="scr-vid" src="vid/miles-of-love.mp4" poster="img/miles-of-love-poster.jpg" controls playsinline preload="metadata"></video><div class="scr-info">${info}</div></div>`; return n?`<div class="cine"><small>NOW SCREENING</small><b>${esc(n.title.toUpperCase())}</b><span>${esc(n.note.toUpperCase())}</span></div>`:`<div class="cine"><small>THE SCREEN IS CLEAR</small><b>NOTHING WAITING</b><span>EVERY CALL IS MADE</span></div>`}}]}
+  screens:[{q:[[380,262],[940,262],[940,478],[380,478]],src:1280, w:1000,h:372, html:()=>{const n=S.queue[0]; const info=n?`<small>NOW SCREENING</small><b>${esc(n.title.toUpperCase())}</b><span>${esc(n.note.toUpperCase())}</span>`:`<small>NOW PLAYING</small><b>${esc(String(NS().title).toUpperCase())}</b><span>${esc(String(NS().note||'').toUpperCase())}</span>`; const ns=NS(); return `<div class="scr"><video class="scr-vid" src="${esc(ns.src)}" poster="${esc(ns.poster||'')}" controls playsinline preload="metadata"></video><div class="scr-info">${info}</div></div>`; return n?`<div class="cine"><small>NOW SCREENING</small><b>${esc(n.title.toUpperCase())}</b><span>${esc(n.note.toUpperCase())}</span></div>`:`<div class="cine"><small>THE SCREEN IS CLEAR</small><b>NOTHING WAITING</b><span>EVERY CALL IS MADE</span></div>`}}]}
 ];
 
 const REEL='';
@@ -419,7 +451,7 @@ R.forEach((r,ri)=>{
   stage.insertBefore(el,stage.firstChild);
   const btn=document.createElement('button');btn.type='button';btn.dataset.id=r.id;btn.innerHTML=`<span class="light ${r.light}" data-light="${r.id}"></span>${esc(r.name)}`;btn.onclick=()=>go(r.id);rail.appendChild(btn);
 });
-function renderScreens(){stage.querySelectorAll('.screen').forEach(d=>{const r=R[d.dataset.r],s=r.screens[d.dataset.s];d.innerHTML=s.html()})}
+function renderScreens(){stage.querySelectorAll('.screen').forEach(d=>{const r=R[d.dataset.r],s=r.screens[d.dataset.s];const html=s.html();if(d._h===html)return;const v=d.querySelector('video.scr-vid');if(v&&!v.paused&&html.includes(v.getAttribute('src')))return;d._h=html;d.innerHTML=html})}
 function fit(){const W=stage.clientWidth,H=stage.clientHeight;stage.querySelectorAll('.screen').forEach(d=>{const r=R[d.dataset.r],s=r.screens[d.dataset.s];const sw=s.src,sh=s.src*9/16;const q=s.q.map(([x,y])=>[x/sw*W,y/sh*H]);d.style.transform=matrixFor(s.w,s.h,q)})}
 
 /* ---------- detail panels ---------- */
@@ -468,7 +500,7 @@ function detailHTML(r){
      if(S.decided.length) body+=`<div style="margin-top:18px">${rowsHTML(S.decided.map(d=>[d.title,d.ok?'Greenlit':'Sent back',`<span class="pill ${d.ok?'st-delivered':'st-delayed'}">${d.ok?'GREENLIT':'SENT BACK'}</span>`]))}</div>`;
      break;
   }
-  return head+crewPanel(r.id)+'</div><div>'+body+'</div>';
+  return head+crewPanel(r.id)+'</div><div>'+body+overheardPanel(r.id)+'</div>';
 }
 
 /* ---------- navigation ---------- */
@@ -613,6 +645,9 @@ async function decide(ok){
   detail.innerHTML=detailHTML(scr); bindDetail();
   toast(ok? `Greenlit. ${n.title} moves to Delivered on the board.` : `Sent back. ${n.title} returns to its team.`);
 }
+detail.addEventListener('click',e=>{const s=e.target.closest('[data-say]'),o=e.target.closest('[data-ovh]');
+  if(s){const a=(LIVE.agents||{})[s.dataset.say]||{};playLines([{who:a.name||s.dataset.say,text:a.say||a.now||''}],'');}
+  if(o){const c=OVH()[+o.dataset.ovh];if(c)playLines(Object.assign([...(c.lines||[])],{audio:c.audio}),roomName(c.room))}});
 function bindDetail(){const g=document.getElementById('greenlight'),s=document.getElementById('sendback');if(g)g.onclick=()=>decide(true);if(s)s.onclick=()=>decide(false)}
 function syncLights(){R.forEach(r=>document.querySelectorAll(`[data-light="${r.id}"]`).forEach(l=>l.className='light '+r.light))}
 document.getElementById('reset').onclick=()=>{S=JSON.parse(JSON.stringify(DEFAULT));save();R.find(r=>r.id==='screening').light='waiting';const bz=R.find(r=>r.id==='business');bz.light='waiting';bz.now='Drafted outreach to a Malibu listing agent. It’s waiting in the screening room.';syncLights();renderScreens();fit();const id=R[cur].id;cur=-1;go(id,false);toast('Sample data reset.')};
@@ -711,6 +746,9 @@ async function loadFeed(){
     LIVE.briefing=d.briefing||null;
     LIVE.agents=d.agents||{};
     LIVE.roster=(d.roster&&typeof d.roster==='object')?d.roster:{};
+    LIVE.overheard=Array.isArray(d.overheard)?d.overheard.slice(0,20):[];
+    LIVE.stations=Array.isArray(d.stations)?d.stations:null;
+    LIVE.nowShowing=d.nowShowing&&typeof d.nowShowing==='object'?d.nowShowing:null;
     LIVE.projects=Array.isArray(d.projects)&&d.projects.length?d.projects.slice(0,8).map(p=>({id:String(p.id||''),name:String(p.name||''),div:String(p.div||'SERVICES').toUpperCase(),status:String(p.status||'IN REVIEW').toUpperCase(),due:String(p.due||'')})):null;
     LIVE.screening=[];
   }catch(e){}

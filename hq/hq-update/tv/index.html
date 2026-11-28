@@ -196,11 +196,11 @@ function render(d){
   const AG=d.agents||{},RO=d.roster||{},RN={ceo:'CEO',producer:'Producer',newsroom:'Newsroom',marketing:'Marketing','edit-bay':'Edit Bay',writers:'Writers',business:'Lookout'};
   const ORD={waiting:0,working:1,done:2,idle:3};
   Object.keys(RO).filter(id=>AG[id]).map(id=>Object.assign({id},AG[id])).sort((x,y)=>(ORD[x.light]??3)-(ORD[y.light]??3)).slice(0,12).forEach(a=>{
-    const m=el('div','fm'),f=el('div','fc',String(a.name||a.id).replace(/^the\s+/i,'').split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase());
+    const m=el('div','fm'),f=el('div','fc',String(a.person||a.name||a.id).replace(/^the\s+/i,'').split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase());
     if(/^https:\/\//i.test(a.avatar||'')&&!/\.(mp4|webm)(\?|$)/i.test(a.avatar)){const im=document.createElement('img');im.src=a.avatar;im.alt='';f.appendChild(im)}
     f.appendChild(el('span','dot '+(a.light||'idle')));
     const n=(a.waitingOnMichael||[]).length;if(n)f.appendChild(el('span','ask',String(n)));
-    m.appendChild(f);m.appendChild(el('small',null,a.name||a.id));floor.appendChild(m);
+    m.appendChild(f);m.appendChild(el('small',null,a.person||a.name||a.id));floor.appendChild(m);
   });
 
   $('footer').textContent=b.footer||'';
